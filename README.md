@@ -1,4 +1,4 @@
-# -Object-Oriented-Programming-
+# Object-Oriented-Programming
 个人用AI跑的一份电子文档，供自己学习使用，现作为第一个仓库上传github向大家分享
 大二上计算机科学与技术课内课程面向对象程序设计，在学习时遇到部分问题求教AI帮助
 一开始使用豆包做问答，现在用WorkBuddy整理相关知识点，尝试做了一份“电子书”。
