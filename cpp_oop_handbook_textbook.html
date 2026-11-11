@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C++ 面向对象程序设计 · 教材同步版知识点手册</title>
+<style>
+:root{
+  --bg:#ffffff; --bg-soft:#f7f9fb; --bg-code:#f6f8fa; --text:#1f2328;
+  --muted:#5f6672; --faint:#8b949e; --line:#e3e7ec; --accent:#185fa5;
+  --accent-soft:#eaf2fb; --purple:#7c3aed;
+  --mono:Consolas,"Cascadia Code","JetBrains Mono","SFMono-Regular","Courier New",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.8}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:20;transition:width .08s linear}
+.app{display:flex;max-width:1500px;margin:0 auto}
+.sidebar{width:272px;flex:0 0 272px;position:sticky;top:0;height:100vh;overflow-y:auto;
+  border-right:1px solid var(--line);padding:28px 18px 60px 24px;background:var(--bg-soft)}
+.sidebar .brand{font-size:15px;font-weight:600;letter-spacing:.2px;margin:0 0 4px}
+.sidebar .brand-sub{font-size:12px;color:var(--muted);margin:0 0 18px}
+#tocSearch{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;
+  font-family:inherit;font-size:13px;background:#fff;color:var(--text);outline:none}
+#tocSearch:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+#toc{margin-top:16px;display:flex;flex-direction:column;gap:1px}
+.toc-link{display:block;text-decoration:none;color:var(--muted);font-size:13px;line-height:1.5;
+  padding:5px 9px;border-radius:6px;border-left:2px solid transparent;transition:.15s}
+.toc-link:hover{background:#eef3f8;color:var(--accent)}
+.toc-link.active{color:var(--accent);background:var(--accent-soft);border-left-color:var(--accent);font-weight:600}
+.toc-h3{padding-left:22px;font-size:12.5px;color:var(--faint)}
+.toc-h3.active{color:var(--accent)}
+.toc-h4{padding-left:38px;font-size:12px;color:var(--faint)}
+.toc-h4.active{color:var(--accent)}
+.toc-empty{font-size:12px;color:var(--faint);padding:10px}
+.content{flex:1;min-width:0;padding:44px 56px 100px;max-width:1000px}
+.hero{border-bottom:1px solid var(--line);padding-bottom:26px;margin-bottom:32px}
+.hero h1{font-size:30px;line-height:1.35;margin:0 0 10px;font-weight:650;letter-spacing:-.3px}
+.hero .lead{color:var(--muted);font-size:14.5px;margin:0 0 16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:12px;padding:4px 11px;border-radius:999px;background:var(--accent-soft);color:var(--accent);border:1px solid #d5e5f5}
+.chip.alt{background:#f3eefd;color:var(--purple);border-color:#e6dcfa}
+h2{font-size:22px;margin:52px 0 18px;padding-bottom:10px;border-bottom:2px solid var(--accent);font-weight:650;scroll-margin-top:20px}
+h3{font-size:17.5px;margin:34px 0 12px;font-weight:650;color:#123f70;scroll-margin-top:20px}
+h3::before{content:"";display:inline-block;width:4px;height:15px;background:var(--accent);margin-right:9px;vertical-align:-2px;border-radius:2px}
+h4{font-size:15.5px;margin:24px 0 8px;font-weight:650}
+p{margin:12px 0}
+strong{font-weight:650;color:#111827}
+ul,ol{margin:12px 0;padding-left:26px}
+li{margin:6px 0}
+li::marker{color:var(--accent)}
+code{font-family:var(--mono);font-size:.88em;background:#eef1f4;color:#a8324a;
+  padding:2px 5px;border-radius:4px;white-space:nowrap}
+hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+.callout{background:#f0f6fd;border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
+  padding:12px 16px;margin:16px 0;font-size:14px;color:#25415c;line-height:1.75}
+.tbl-wrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;line-height:1.65}
+th,td{padding:9px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f2f6fa;font-weight:650;color:#24415e;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#fafcfd}
+td code{font-size:.85em}
+.code-block{margin:16px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg-code)}
+.code-head{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;
+  background:#eef2f6;border-bottom:1px solid var(--line)}
+.lang{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.6px}
+.copy-btn{font-family:inherit;font-size:11.5px;color:var(--accent);background:#fff;
+  border:1px solid #cfdce9;border-radius:6px;padding:3px 10px;cursor:pointer;transition:.15s}
+.copy-btn:hover{background:var(--accent-soft)}
+.copy-btn.done{color:#0f6e56;border-color:#9fe1cb;background:#e1f5ee}
+pre{margin:0;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:12.8px;line-height:1.7;
+  tab-size:4;white-space:pre}
+pre code{background:none;padding:0;color:var(--text);font-size:inherit;white-space:pre}
+.c-kw{color:#7c3aed}.c-ty{color:#185fa5}.c-str{color:#0f6e56}.c-num{color:#b45309}
+.c-com{color:#8b949e;font-style:italic}.c-pp{color:#a32d2d}.c-fn{color:#993c1d}
+.footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--faint)}
+#topBtn{position:fixed;right:26px;bottom:26px;width:38px;height:38px;border-radius:10px;
+  border:1px solid var(--line);background:#fff;color:var(--accent);cursor:pointer;font-size:16px;
+  box-shadow:0 2px 8px rgba(20,40,70,.08);display:none}
+#topBtn:hover{background:var(--accent-soft)}
+@media (max-width:960px){
+  .app{flex-direction:column}
+  .sidebar{position:static;width:100%;height:auto;flex:none;border-right:0;border-bottom:1px solid var(--line);padding:20px}
+  #toc{max-height:210px;overflow-y:auto}
+  .content{padding:28px 20px 70px}
+  .hero h1{font-size:24px}
+}
+@media print{
+  .sidebar,#topBtn,#progress,.copy-btn{display:none}
+  .content{padding:0;max-width:none}
+  .code-block,table,.callout{break-inside:avoid}
+  body{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="app">
+  <aside class="sidebar">
+    <p class="brand">教材同步版 · 按章节编号</p>
+    <p class="brand-sub">目录 / 点击跳转</p>
+    <input id="tocSearch" type="text" placeholder="筛选目录..." autocomplete="off">
+    <nav id="toc">
+<a class="toc-link toc-h2" href="#sec-1" data-text="0. 这份手册怎么用">0. 这份手册怎么用</a>
+<a class="toc-link toc-h3" href="#sec-2" data-text="0.1 两个版本的分工">0.1 两个版本的分工</a>
+<a class="toc-link toc-h3" href="#sec-3" data-text="0.2 覆盖度标记">0.2 覆盖度标记</a>
+<a class="toc-link toc-h3" href="#sec-4" data-text="0.3 术语对照表（考试填空注意）">0.3 术语对照表（考试填空注意）</a>
+<a class="toc-link toc-h3" href="#sec-5" data-text="0.4 按课时权重的复习顺序">0.4 按课时权重的复习顺序</a>
+<a class="toc-link toc-h3" href="#sec-6" data-text="0.5 代码风格约定（依据教材 p238–240 / p292–293）">0.5 代码风格约定（依据教材 p238–240 / p292–293）</a>
+<a class="toc-link toc-h2" href="#sec-7" data-text="1. 教材章节 ↔ 手册章节 对照表">1. 教材章节 ↔ 手册章节 对照表</a>
+<a class="toc-link toc-h2" href="#sec-8" data-text="2. 第 1 章 绪论：面向对象的基本概念（了解）">2. 第 1 章 绪论：面向对象的基本概念（了解）</a>
+<a class="toc-link toc-h3" href="#sec-9" data-text="2.1 四大基本特点（教材 4.1 会再展开）">2.1 四大基本特点（教材 4.1 会再展开）</a>
+<a class="toc-link toc-h3" href="#sec-10" data-text="2.2 教材其余小节（了解，不考代码）">2.2 教材其余小节（了解，不考代码）</a>
+<a class="toc-link toc-h2" href="#sec-11" data-text="3. 第 3 章 函数：oop 的前置知识（➕ 补齐）">3. 第 3 章 函数：OOP 的前置知识（➕ 补齐）</a>
+<a class="toc-link toc-h3" href="#sec-12" data-text="3.1 三种参数传递 ★">3.1 三种参数传递 ★</a>
+<a class="toc-link toc-h3" href="#sec-13" data-text="3.2 其余要点（教材 3.2 ~ 3.7）">3.2 其余要点（教材 3.2 ~ 3.7）</a>
+<a class="toc-link toc-h2" href="#sec-14" data-text="4. 第 4 章 类与对象【核心 · 权重最高】">4. 第 4 章 类与对象【核心 · 权重最高】</a>
+<a class="toc-link toc-h3" href="#sec-15" data-text="4.1 类的定义、访问控制与对象（教材 4.2）">4.1 类的定义、访问控制与对象（教材 4.2）</a>
+<a class="toc-link toc-h3" href="#sec-16" data-text="4.2 构造函数与析构函数全家族（教材 4.3.1 ~ 4.3.5）">4.2 构造函数与析构函数全家族（教材 4.3.1 ~ 4.3.5）</a>
+<a class="toc-link toc-h3" href="#sec-17" data-text="4.3 ⭐ 复制构造函数 a(const a&amp; a)（教材 4.3.4，你点名的重点）">4.3 ⭐ 复制构造函数 A(const A&amp; a)（教材 4.3.4，你点名的重点）</a>
+<a class="toc-link toc-h4" href="#sec-18" data-text="4.3.1 签名逐字拆解">4.3.1 签名逐字拆解</a>
+<a class="toc-link toc-h4" href="#sec-19" data-text="4.3.2 三种调用时机（必背）">4.3.2 三种调用时机（必背）</a>
+<a class="toc-link toc-h4" href="#sec-20" data-text="4.3.3 默认复制构造 = 浅复制（教材 6.5 提前理解）">4.3.3 默认复制构造 = 浅复制（教材 6.5 提前理解）</a>
+<a class="toc-link toc-h4" href="#sec-21" data-text="4.3.4 深复制的两种标准写法">4.3.4 深复制的两种标准写法</a>
+<a class="toc-link toc-h4" href="#sec-22" data-text="4.3.5 rule of three / five / zero">4.3.5 Rule of Three / Five / Zero</a>
+<a class="toc-link toc-h4" href="#sec-23" data-text="4.3.6 高频易错点">4.3.6 高频易错点</a>
+<a class="toc-link toc-h3" href="#sec-24" data-text="4.4 移动构造与 default / delete（教材 4.3.6 ~ 4.3.7）">4.4 移动构造与 default / delete（教材 4.3.6 ~ 4.3.7）</a>
+<a class="toc-link toc-h3" href="#sec-25" data-text="4.5 ➕ 类的组合与前向引用声明（教材 4.4，原版缺）">4.5 ➕ 类的组合与前向引用声明（教材 4.4，原版缺）</a>
+<a class="toc-link toc-h3" href="#sec-26" data-text="4.6 ➕ uml 图形标识（教材 4.5，原版缺）">4.6 ➕ UML 图形标识（教材 4.5，原版缺）</a>
+<a class="toc-link toc-h3" href="#sec-27" data-text="4.7 ➕ 结构体、联合体、枚举、位域（教材 4.6 / 4.7 / 4.9.1，原版缺）">4.7 ➕ 结构体、联合体、枚举、位域（教材 4.6 / 4.7 / 4.9.1，原版缺）</a>
+<a class="toc-link toc-h3" href="#sec-28" data-text="4.8 构造类型转换与对象传递方式（教材 4.9.2 / 4.9.3）">4.8 构造类型转换与对象传递方式（教材 4.9.2 / 4.9.3）</a>
+<a class="toc-link toc-h2" href="#sec-29" data-text="5. 第 5 章 数据的共享与保护【核心】">5. 第 5 章 数据的共享与保护【核心】</a>
+<a class="toc-link toc-h3" href="#sec-30" data-text="5.1 ➕ 作用域、可见性与生存期（教材 5.1 / 5.2，原版缺）">5.1 ➕ 作用域、可见性与生存期（教材 5.1 / 5.2，原版缺）</a>
+<a class="toc-link toc-h3" href="#sec-31" data-text="5.2 静态成员与友元（教材 5.3 / 5.4，原版 1.6 已覆盖）">5.2 静态成员与友元（教材 5.3 / 5.4，原版 1.6 已覆盖）</a>
+<a class="toc-link toc-h3" href="#sec-32" data-text="5.3 ➕ 常对象、常成员、常引用（教材 5.5，原版部分覆盖）">5.3 ➕ 常对象、常成员、常引用（教材 5.5，原版部分覆盖）</a>
+<a class="toc-link toc-h3" href="#sec-33" data-text="5.4 ➕ 多文件结构与编译预处理（教材 5.6，原版缺）">5.4 ➕ 多文件结构与编译预处理（教材 5.6，原版缺）</a>
+<a class="toc-link toc-h2" href="#sec-34" data-text="6. 第 6 章 数组、指针与字符串（衔接章）">6. 第 6 章 数组、指针与字符串（衔接章）</a>
+<a class="toc-link toc-h3" href="#sec-35" data-text="6.1 ➕ 对象数组、对象指针、动态内存分配（教材 6.1.4 / 6.2.11 / 6.3，原版缺）">6.1 ➕ 对象数组、对象指针、动态内存分配（教材 6.1.4 / 6.2.11 / 6.3，原版缺）</a>
+<a class="toc-link toc-h3" href="#sec-36" data-text="6.2 ⭐ 深复制与浅复制（教材 6.5，原版 3.3 / 3.4）">6.2 ⭐ 深复制与浅复制（教材 6.5，原版 3.3 / 3.4）</a>
+<a class="toc-link toc-h3" href="#sec-37" data-text="6.3 string 类（教材 6.6.2）">6.3 string 类（教材 6.6.2）</a>
+<a class="toc-link toc-h2" href="#sec-38" data-text="7. 第 7 章 类的继承【核心】">7. 第 7 章 类的继承【核心】</a>
+<a class="toc-link toc-h3" href="#sec-39" data-text="7.1 派生类的定义与生成过程（教材 7.1）">7.1 派生类的定义与生成过程（教材 7.1）</a>
+<a class="toc-link toc-h3" href="#sec-40" data-text="7.2 三种继承方式的访问控制（教材 7.2）">7.2 三种继承方式的访问控制（教材 7.2）</a>
+<a class="toc-link toc-h3" href="#sec-41" data-text="7.3 ➕ 类型兼容规则（教材 7.3，原版以「对象切片」部分覆盖）">7.3 ➕ 类型兼容规则（教材 7.3，原版以「对象切片」部分覆盖）</a>
+<a class="toc-link toc-h3" href="#sec-42" data-text="7.4 派生类的构造、复制构造与析构（教材 7.4）">7.4 派生类的构造、复制构造与析构（教材 7.4）</a>
+<a class="toc-link toc-h3" href="#sec-43" data-text="7.5 作用域分辨符与虚基类（教材 7.5）">7.5 作用域分辨符与虚基类（教材 7.5）</a>
+<a class="toc-link toc-h3" href="#sec-44" data-text="7.6 组合与继承（教材 7.8.1）">7.6 组合与继承（教材 7.8.1）</a>
+<a class="toc-link toc-h2" href="#sec-45" data-text="8. 第 8 章 多态性【核心】">8. 第 8 章 多态性【核心】</a>
+<a class="toc-link toc-h3" href="#sec-46" data-text="8.1 ➕ 多态的四种类型（教材 8.1.1，原版只分了两种）">8.1 ➕ 多态的四种类型（教材 8.1.1，原版只分了两种）</a>
+<a class="toc-link toc-h3" href="#sec-47" data-text="8.2 运算符重载（教材 8.2，原版第 7 章）">8.2 运算符重载（教材 8.2，原版第 7 章）</a>
+<a class="toc-link toc-h3" href="#sec-48" data-text="8.3 虚函数、虚析构、纯虚函数与抽象类（教材 8.3 / 8.4）">8.3 虚函数、虚析构、纯虚函数与抽象类（教材 8.3 / 8.4）</a>
+<a class="toc-link toc-h3" href="#sec-49" data-text="8.4 动态绑定原理与 rtti（教材 8.7）">8.4 动态绑定原理与 RTTI（教材 8.7）</a>
+<a class="toc-link toc-h2" href="#sec-50" data-text="9. 第 9 ~ 12 章：了解 / 选读">9. 第 9 ~ 12 章：了解 / 选读</a>
+<a class="toc-link toc-h2" href="#sec-51" data-text="10. 缺口清单：教材有、原版手册没有（本版已补齐）">10. 缺口清单：教材有、原版手册没有（本版已补齐）</a>
+<a class="toc-link toc-h2" href="#sec-52" data-text="11. 超纲清单：原版手册有、教材不作要求（⭐ 选读）">11. 超纲清单：原版手册有、教材不作要求（⭐ 选读）</a>
+<a class="toc-link toc-h2" href="#sec-53" data-text="12. 速查与考试易错点">12. 速查与考试易错点</a>
+<a class="toc-link toc-h3" href="#sec-54" data-text="12.1 特殊成员函数一览">12.1 特殊成员函数一览</a>
+<a class="toc-link toc-h3" href="#sec-55" data-text="12.2 复制构造高频问答（简答版）">12.2 复制构造高频问答（简答版）</a>
+<a class="toc-link toc-h3" href="#sec-56" data-text="12.3 windows（dev-c++）下中文乱码（保留原版 9.4）">12.3 Windows（Dev-C++）下中文乱码（保留原版 9.4）</a>
+<a class="toc-link toc-h3" href="#sec-57" data-text="12.4 编译与调试命令（已在本机实测）">12.4 编译与调试命令（已在本机实测）</a>
+<a class="toc-link toc-h2" href="#sec-58" data-text="附：文件清单">附：文件清单</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <div class="hero">
+      <h1>C++ 面向对象程序设计 · 教材同步版</h1>
+      <p class="lead">依据《C++ 语言程序设计（第 5 版）》目录重排 —— 章节编号与教材一致，含对照表、缺口补充与超纲标记。</p>
+<span class="chip">对齐教材 12 章</span>
+<span class="chip">《第 5 版》目录</span>
+<span class="chip alt">重点：4.3.4 复制构造函数</span>
+<span class="chip">★ 核心 / ➕ 补充 / ⭐ 超纲</span>
+    </div>
+<div class="callout"><strong>依据教材</strong>：《C++ 语言程序设计（第 5 版）》目录（你提供的 9 张照片，已整理为 <code>教材目录_整理版.md</code>）。<br><strong>章节编号全部按教材</strong>：<code>4.3.4</code> 就是教材第 4 章 4.3 节第 4 小节，可直接对着课本找。<br><strong>配套</strong>：<code>cpp_oop_handbook.html</code>（按知识体系组织的原版，讲解更展开）、<code>cpp_oop_demo.cpp</code> / <code>cpp_oop_demo_gbk.cpp</code>（可运行综合示例）。<br><strong>代码约定</strong>：所有片段统一 <code>using namespace std;</code>，省略 <code>std::</code> 前缀；唯一例外是块作用域的 <code>using std::swap;</code>（见 4.3 说明）。<br><strong>术语约定</strong>：本版一律采用教材用语 <strong>复制构造函数</strong>、<strong>深复制 / 浅复制</strong>；「拷贝构造」「深拷贝 / 浅拷贝」是同一概念的其他叫法。</div>
+<hr>
+<h2 id="sec-1">0. 这份手册怎么用</h2>
+<h3 id="sec-2">0.1 两个版本的分工</h3>
+<div class="tbl-wrap"><table><thead><tr><th>文件</th><th>组织方式</th><th>适合</th></tr></thead><tbody><tr><td><code>cpp_oop_handbook.html</code>（原版）</td><td>按 C++ 知识体系，由浅入深</td><td>系统理解、面试准备、查某个机制</td></tr><tr><td><strong><code>cpp_oop_handbook_textbook.html</code>（本版）</strong></td><td><strong>按教材章 → 节 → 小节编号</strong></td><td><strong>跟课复习、对着作业/考纲找知识点</strong></td></tr><tr><td><code>教材目录_整理版.md</code></td><td>教材目录纯文本</td><td>自己划重点、做 checklist</td></tr></tbody></table></div>
+<p>两份都是离线单文件网页，左侧目录可筛选、代码可一键复制、支持打印。本版<strong>不是</strong>把原版内容换个编号抄一遍：重点章（4/5/7/8）按教材顺序重写并补齐教材专有考点，非重点章给出要点与「了解即可」的边界。</p>
+<h3 id="sec-3">0.2 覆盖度标记</h3>
+<div class="tbl-wrap"><table><thead><tr><th>标记</th><th>含义</th></tr></thead><tbody><tr><td>✅</td><td>原版手册已覆盖，本版按教材编号重排</td></tr><tr><td>⚠️</td><td>原版部分覆盖 / 讲解角度不同，本版已对齐教材</td></tr><tr><td>➕</td><td><strong>教材有、原版没有</strong> —— 本版新增补齐（考试可能考）</td></tr><tr><td>⭐</td><td><strong>超纲</strong>：原版讲得比教材深，入门课一般不要求，选读</td></tr></tbody></table></div>
+<h3 id="sec-4">0.3 术语对照表（考试填空注意）</h3>
+<div class="tbl-wrap"><table><thead><tr><th>教材用语（本版采用）</th><th>其他常见叫法</th><th>说明</th></tr></thead><tbody><tr><td>复制构造函数</td><td>拷贝构造函数、copy constructor</td><td>你最初写的 <code>A(const A&amp; a)</code> 就是它，教材 4.3.4</td></tr><tr><td>深复制 / 浅复制</td><td>深拷贝 / 浅拷贝、深层复制 / 浅层复制</td><td>教材在 <strong>6.5</strong> 讲，不在第 4 章</td></tr><tr><td>类成员的访问控制</td><td>访问权限</td><td><code>public</code> / <code>protected</code> / <code>private</code></td></tr><tr><td>常对象 / 常成员函数</td><td>const 对象 / const 成员函数</td><td>教材 5.5</td></tr><tr><td>常引用</td><td>const 引用</td><td>教材 5.5.3</td></tr><tr><td>静态函数成员</td><td>静态成员函数</td><td>教材 5.3.2</td></tr><tr><td>类型兼容规则</td><td>里氏替换、向上转型</td><td>教材 7.3</td></tr><tr><td>作用域分辨符</td><td>作用域限定符、<code>::</code> 运算符</td><td>教材 7.5.1</td></tr><tr><td>包含多态</td><td>运行期多态、动态多态</td><td>教材 8.1.1，靠虚函数实现</td></tr><tr><td>抽象类</td><td>抽象基类</td><td>教材 8.4.2，含纯虚函数</td></tr><tr><td>类的组合</td><td>组合 / 聚合、has-a</td><td>教材 4.4</td></tr></tbody></table></div>
+<div class="callout"><strong>最容易吃亏的一点</strong>：教材把「深复制与浅复制」放在 <strong>6.5</strong>（数组指针章），而原版手册把它并进第 3 章一起讲。复习时请按 6.5 找，但<strong>概念要和 4.3.4 复制构造函数连起来理解</strong>——浅复制正是默认复制构造的行为。</div>
+<h3 id="sec-5">0.4 按课时权重的复习顺序</h3>
+<ol><li><strong>第 4 章 类与对象</strong>（最核心）：类定义 → 访问控制 → 构造/析构 → <strong>4.3.4 复制构造函数</strong> → 组合</li><li><strong>第 5 章 数据的共享与保护</strong>：<code>static</code> / <code>const</code> / 友元 / 作用域，选择题高频</li><li><strong>第 7 章 继承</strong> → <strong>第 8 章 多态</strong>：两者连着考，虚函数和虚析构是大题常客</li><li><strong>6.5 深复制与浅复制</strong>：回头补，配合 4.3.4</li><li>第 1 / 2 / 3 章：概念与语法，了解或快速复习</li><li>第 9 ~ 12 章：模板、STL、流、异常，多为了解性内容（依老师划的范围）</li></ol>
+<hr>
+<h3 id="sec-6">0.5 代码风格约定（依据教材 p238–240 / p292–293）</h3>
+<div class="callout">依据你提供的 5 张「代码风格」照片整理，完整规则与教材原码摘录见 <code>教材代码风格_整理版.md</code>。</div>
+<div class="tbl-wrap"><table><thead><tr><th>项目</th><th>教材实际写法</th><th>本手册采用的写法</th></tr></thead><tbody><tr><td><code>std::</code> 前缀</td><td><code>.h</code> 里全限定 <code>std::string</code>；<code>.cpp</code> 里 <code>using namespace std;</code> 后用裸名字</td><td><strong>统一 <code>using namespace std;</code></strong>（按你的要求省略 <code>std::</code>）；唯一例外是 4.3.4 的 <code>using std::swap;</code></td></tr><tr><td>注释</td><td>中文行尾注释、注释列对齐、函数组前有段注释</td><td><strong>一致，且比教材更详细</strong>：短注释扩写成「为什么」，重点代码块前加 3–5 行观察点</td></tr><tr><td>术语</td><td>复制构造 / 深复制 / 浅复制</td><td><strong>一致</strong>（全稿统一，对照表见 0.3）</td></tr><tr><td>数据成员命名</td><td>不带下划线：<code>id</code>、<code>balance</code>、<code>rate</code></td><td>保留 <code>id_</code>、<code>r_</code>、<code>data_</code> 等后缀</td></tr><tr><td>构造函数形参</td><td>与成员同名：<code>: year(year), month(month)</code></td><td>用 <code>n</code> / <code>r</code> / <code>v</code> 区分：<code>: r_(r)</code></td></tr><tr><td>大括号 / 缩进</td><td>K&amp;R、访问控制符顶格、4 空格</td><td><strong>一致</strong></td></tr><tr><td>头文件保护</td><td><code>#ifndef __ACCOUNT_H__</code></td><td>用 <code>POINT_H</code>（双下划线开头是 C++ 保留标识符，工程上不推荐）</td></tr></tbody></table></div>
+<div class="callout"><strong>为什么命名没按教材改</strong>：教材让形参与成员同名，函数体里必须靠 <code>this-&gt;</code> 区分，漏写就变成自我赋值；改成 <code>size</code> 还会和现有的 <code>size()</code> 成员函数撞名。考试答题按教材写没问题，本手册为避免示例出歧义保留了下划线后缀。需要全部改成教材命名，说一声即可。</div>
+<p><strong>教材风格原码片段</strong>（<code>account.h</code> —— 注意 <code>.h</code> 里不写 <code>using</code>，这是全稿唯一出现 <code>std::</code> 的地方，仅作对照）：</p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-com">//account.h</span>
+<span class="c-com">// 片段：教材原码摘录，依赖同项目的 date.h，单独编译会找不到头文件</span>
+<span class="c-pp">#ifndef</span> __ACCOUNT_H__
+<span class="c-pp">#define</span> __ACCOUNT_H__
+<span class="c-pp">#include</span> <span class="c-str">"date.h"</span>
+<span class="c-pp">#include</span> &lt;<span class="c-ty">string</span>&gt;
+<span class="c-kw">class</span> SavingsAccount {          <span class="c-com">//储蓄账户类</span>
+<span class="c-kw">private</span>:
+    <span class="c-ty">std</span>::<span class="c-ty">string</span> id;             <span class="c-com">//账号</span>
+    <span class="c-kw">double</span> balance;             <span class="c-com">//余额</span>
+    <span class="c-kw">double</span> rate;                <span class="c-com">//存款的年利率</span>
+<span class="c-kw">public</span>:                         <span class="c-com">//公有接口</span>
+    <span class="c-com">//构造函数</span>
+    <span class="c-fn">SavingsAccount</span>(<span class="c-kw">const</span> Date &amp;date, <span class="c-kw">const</span> <span class="c-ty">std</span>::<span class="c-ty">string</span> &amp;id, <span class="c-kw">double</span> rate);
+    <span class="c-kw">const</span> <span class="c-ty">std</span>::<span class="c-ty">string</span> &amp;<span class="c-fn">getId</span>() <span class="c-kw">const</span> { <span class="c-kw">return</span> id; }
+    <span class="c-kw">double</span> <span class="c-fn">getBalance</span>() <span class="c-kw">const</span> { <span class="c-kw">return</span> balance; }
+    <span class="c-com">//存入现金</span>
+    <span class="c-kw">void</span> <span class="c-fn">deposit</span>(<span class="c-kw">const</span> Date &amp;date, <span class="c-kw">double</span> amount, <span class="c-kw">const</span> <span class="c-ty">std</span>::<span class="c-ty">string</span> &amp;desc);
+    <span class="c-com">//显示账户信息</span>
+    <span class="c-kw">void</span> <span class="c-fn">show</span>() <span class="c-kw">const</span>;
+};
+<span class="c-pp">#endif</span> <span class="c-com">//__ACCOUNT_H__</span></code></pre></div>
+<div class="callout">对照：本手册的类定义写成 <code>using namespace std;</code> + <code>string id_;</code> + 更详细的中文注释 —— 形式不同，知识点完全一致。<strong><code>using namespace std;</code> 只能写在 <code>.cpp</code> 里</strong>，写进头文件会污染所有包含它的源文件（原版手册 0.1 节有详细说明）。</div>
+<hr>
+<h2 id="sec-7">1. 教材章节 ↔ 手册章节 对照表</h2>
+<div class="callout">「原版章节」指 <code>cpp_oop_handbook.html</code> 的编号；「本版位置」是本文件的小节号。</div>
+<div class="tbl-wrap"><table><thead><tr><th>教材章节</th><th>原版章节</th><th>覆盖</th><th>本版位置</th><th>说明</th></tr></thead><tbody><tr><td>第 1 章 绪论</td><td>0. 总览</td><td>⚠️</td><td>第 2 节</td><td>原版缺「面向对象方法、软件开发过程、信息表示与存储」，属了解性内容</td></tr><tr><td>第 2 章 C++ 简单程序设计</td><td>—</td><td>➕</td><td>略</td><td>语法基础，非 OOP 范围；<code>auto</code>/<code>decltype</code>/<code>constexpr</code> 见原版 8 章简述</td></tr><tr><td>第 3 章 函数</td><td>—</td><td>➕</td><td>第 3 节</td><td><strong>参数传递（值/引用/常引用）是复制构造的前置知识</strong>，本版补</td></tr><tr><td><strong>第 4 章 类与对象</strong></td><td>1、2、3、4</td><td>✅</td><td><strong>第 4 节</strong></td><td>核心。4.3.4 复制构造 = 原版第 3 章，本版沿用教材用语重写</td></tr><tr><td>4.4 类的组合</td><td>—</td><td>➕</td><td>4.5</td><td>原版几乎没有，教材单独一节，常考构造顺序</td></tr><tr><td>4.5 UML 图形标识</td><td>—</td><td>➕</td><td>4.6</td><td>原版没有，读图题会考</td></tr><tr><td>4.6 / 4.7 结构体、联合体、枚举</td><td>—</td><td>➕</td><td>4.7</td><td>原版没有</td></tr><tr><td>4.9 位域 / 构造类型转换 / 对象传递</td><td>1.5、3.7</td><td>⚠️</td><td>4.8</td><td><code>explicit</code> 已覆盖；位域、对象作为返回值传递需补</td></tr><tr><td><strong>第 5 章 数据的共享与保护</strong></td><td>1.6（部分）</td><td>⚠️</td><td><strong>第 5 节</strong></td><td>静态成员、友元已覆盖；<strong>作用域/可见性/生存期/常对象/多文件结构全缺</strong></td></tr><tr><td>第 6 章 数组、指针与字符串</td><td>4.2（部分）</td><td>⚠️</td><td>第 6 节</td><td>智能指针已覆盖；对象数组/对象指针/动态分配/<code>string</code> 需补</td></tr><tr><td><strong>6.5 深复制与浅复制</strong></td><td>3.3 / 3.4</td><td>✅</td><td>6.2</td><td>内容一致，但教材位置在 6.5</td></tr><tr><td><strong>第 7 章 类的继承</strong></td><td>5</td><td>⚠️</td><td><strong>第 7 节</strong></td><td>三种继承、菱形继承已覆盖；<strong>类型兼容规则、作用域分辨符、虚基类</strong>需补</td></tr><tr><td><strong>第 8 章 多态性</strong></td><td>6、7</td><td>⚠️</td><td><strong>第 8 节</strong></td><td>虚函数/vtable/运算符重载已覆盖；<strong>多态四种类型、重载规则、RTTI</strong>需补</td></tr><tr><td>第 9 章 模板与群体数据</td><td>8（简述）</td><td>⚠️</td><td>第 9 节</td><td>教材讲得比原版细（数组类、链表类、栈、队列、排序查找）</td></tr><tr><td>第 10 章 泛型与 STL</td><td>8（简述）</td><td>⚠️</td><td>第 9 节</td><td>迭代器、容器、函数对象、算法</td></tr><tr><td>第 11 章 流类库与输入输出</td><td>—</td><td>➕</td><td>第 9 节</td><td>原版没有，教材有整章</td></tr><tr><td>第 12 章 异常处理</td><td>8（简述）</td><td>⚠️</td><td>第 9 节</td><td>教材含异常安全、<code>noexcept</code>、资源泄露</td></tr><tr><td>原版 4 移动语义 / RAII</td><td>4</td><td>⭐</td><td>4.4</td><td>教材 4.3.6 / 12.6 有浅尝，<strong>Rule of Five、智能指针偏深</strong></td></tr><tr><td>原版 9 面试问答 / 速查</td><td>9</td><td>⭐</td><td>第 12 节</td><td>超出课程，但适合期末与面试</td></tr></tbody></table></div>
+<hr>
+<h2 id="sec-8">2. 第 1 章 绪论：面向对象的基本概念（了解）</h2>
+<h3 id="sec-9">2.1 四大基本特点（教材 4.1 会再展开）</h3>
+<div class="tbl-wrap"><table><thead><tr><th>特点</th><th>一句话</th><th>C++ 里的对应物</th></tr></thead><tbody><tr><td>抽象</td><td>只暴露必要特征，忽略细节</td><td>类（<code>class</code>）、<code>public</code> 接口</td></tr><tr><td>封装</td><td>数据与操作捆绑，隐藏实现</td><td><code>private</code> / <code>protected</code> + 成员函数</td></tr><tr><td>继承</td><td>在已有类上扩展，复用代码</td><td><code>class B : public A</code></td></tr><tr><td>多态</td><td>同一接口，不同实现</td><td>虚函数 <code>virtual</code>、运算符重载</td></tr></tbody></table></div>
+<p><strong>面向过程 vs 面向对象</strong>（教材 1.2）：面向过程以「函数/步骤」为中心，数据是分散的；面向对象以「对象」为中心，数据和方法绑在一起，通过消息（调用成员函数）交互。</p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-com">// 面向过程：数据和函数分离</span>
+<span class="c-kw">double</span> r = <span class="c-num">3.0</span>;
+<span class="c-kw">double</span> <span class="c-fn">area_of</span>(<span class="c-kw">double</span> radius) { <span class="c-kw">return</span> <span class="c-num">3.14159</span> * radius * radius; }
+
+<span class="c-com">// 面向对象：数据 + 行为封装进类</span>
+<span class="c-kw">class</span> Circle {
+    <span class="c-kw">double</span> radius_;              <span class="c-com">// 数据成员私有：外部不能直接读写，只能通过 public 接口间接访问</span>
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">Circle</span>(<span class="c-kw">double</span> r) : <span class="c-fn">radius_</span>(r) {}
+    <span class="c-kw">double</span> <span class="c-fn">area</span>() <span class="c-kw">const</span> { <span class="c-kw">return</span> <span class="c-num">3.14159</span> * radius_ * radius_; }
+    <span class="c-kw">void</span> <span class="c-fn">setRadius</span>(<span class="c-kw">double</span> r) { radius_ = r; }
+    <span class="c-kw">double</span> <span class="c-fn">radius</span>() <span class="c-kw">const</span> { <span class="c-kw">return</span> radius_; }
+};
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    cout &lt;&lt; <span class="c-fn">area_of</span>(r) &lt;&lt; <span class="c-str">'\n'</span>;  <span class="c-com">// 数据裸露在全局，任何代码都能改，无法保证取值合法</span>
+    Circle <span class="c-fn">c</span>(<span class="c-num">3.0</span>);
+    cout &lt;&lt; c.<span class="c-fn">area</span>() &lt;&lt; <span class="c-str">'\n'</span>;    <span class="c-com">// 访问被收敛到成员函数，类可在其中校验并维护不变量</span>
+}</code></pre></div>
+<h3 id="sec-10">2.2 教材其余小节（了解，不考代码）</h3>
+<ul><li><strong>1.1</strong> 机器语言 → 汇编 → 高级语言 → 面向对象语言；<strong>1.3</strong> 面向对象的软件开发：分析 → 设计 → 编程 → 调试 → 维护。</li><li><strong>1.4 信息的表示与存储</strong>：二/八/十/十六进制转换、原码/反码/补码、定点数与浮点数、ASCII/汉字编码 —— 属计算机基础，常出选择题，与 C++ 语法无关。</li><li><strong>1.5</strong> 源程序 / 目标程序 / 翻译程序、编辑→编译→连接→运行。连接（link）这一步在教材 5.8.2 还会细讲。</li></ul>
+<hr>
+<h2 id="sec-11">3. 第 3 章 函数：OOP 的前置知识（➕ 补齐）</h2>
+<h3 id="sec-12">3.1 三种参数传递 ★</h3>
+<p>这是理解复制构造函数的关键：值传递会<strong>复制对象</strong>，引用传递不会。</p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">void</span> <span class="c-fn">byValue</span>(<span class="c-kw">int</span> x)      { x = <span class="c-num">100</span>; }         <span class="c-com">// 值传递：形参是实参的独立副本，函数内修改形参不影响外部</span>
+<span class="c-kw">void</span> <span class="c-fn">byRef</span>(<span class="c-kw">int</span>&amp; x)       { x = <span class="c-num">100</span>; }         <span class="c-com">// 引用传递：形参是实参的别名，不产生复制，修改会反映到外部</span>
+<span class="c-kw">void</span> <span class="c-fn">byConstRef</span>(<span class="c-kw">const</span> <span class="c-kw">int</span>&amp; x) { cout &lt;&lt; x; }  <span class="c-com">// const 引用：不复制、不可改、还能绑定临时对象，传类对象的首选</span>
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    <span class="c-kw">int</span> a = <span class="c-num">1</span>;
+    <span class="c-fn">byValue</span>(a);     cout &lt;&lt; a &lt;&lt; <span class="c-str">'\n'</span>;        <span class="c-com">// 1</span>
+    <span class="c-fn">byRef</span>(a);       cout &lt;&lt; a &lt;&lt; <span class="c-str">'\n'</span>;        <span class="c-com">// 100</span>
+    <span class="c-fn">byConstRef</span>(a);
+}</code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>方式</th><th>是否复制对象</th><th>能否改实参</th><th>传类对象时</th></tr></thead><tbody><tr><td><code>void f(A a)</code></td><td>是</td><td>否</td><td><strong>调用复制构造函数</strong>，开销大</td></tr><tr><td><code>void f(A&amp; a)</code></td><td>否</td><td>是</td><td>高效，但可能误改</td></tr><tr><td><code>void f(const A&amp; a)</code></td><td>否</td><td>否</td><td><strong>推荐</strong>，且能接收临时对象</td></tr></tbody></table></div>
+<div class="callout">结论：类对象作参数，一律写 <code>const A&amp;</code>。这既解释了为什么复制构造函数自己必须写成 <code>A(const A&amp; a)</code>，也解释了教材 4.9.3「对象作为函数参数和返回值的传递方式」。</div>
+<h3 id="sec-13">3.2 其余要点（教材 3.2 ~ 3.7）</h3>
+<ul><li><strong>内联函数</strong> <code>inline</code>：建议编译器在调用点展开，省去调用开销；适合短小函数，类内定义的成员函数<strong>默认内联</strong>。</li><li><strong><code>constexpr</code> 函数</strong>：编译期即可求值，能用于常量表达式；教材 2.2.5 也有 <code>constexpr</code> 常量。</li><li><strong>带默认形参值的函数</strong>：默认值从右往左连续给；<strong>只能在声明处给一次</strong>（通常放头文件），定义处不能再写。</li><li><strong>函数重载</strong>：同一作用域内名字相同、参数表不同（类型/个数/顺序）；<strong>仅返回值不同不能重载</strong>。</li><li><strong>3.7.1 运行栈</strong>：每次函数调用压入一个栈帧（形参、局部变量、返回地址），返回时弹出 —— 理解「局部对象析构时机」和「为什么不能返回局部对象的引用」的基础。</li></ul>
+<hr>
+<h2 id="sec-14">4. 第 4 章 类与对象【核心 · 权重最高】</h2>
+<h3 id="sec-15">4.1 类的定义、访问控制与对象（教材 4.2）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-pp">#include</span> &lt;<span class="c-ty">string</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Student {
+<span class="c-kw">private</span>:                                   <span class="c-com">// class 成员默认 private；改成 struct 则默认 public（教材 4.6）</span>
+    <span class="c-ty">string</span> name_;
+    <span class="c-kw">int</span> score_ = <span class="c-num">0</span>;                        <span class="c-com">// C++11 类内初值：构造函数未显式初始化该成员时采用它</span>
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">Student</span>(<span class="c-ty">string</span> n) : <span class="c-fn">name_</span>(n) {}
+    <span class="c-kw">void</span> <span class="c-fn">setScore</span>(<span class="c-kw">int</span> s) { score_ = s; }   <span class="c-com">// 类内定义的成员函数被隐式 inline（只是给编译器的展开建议）</span>
+    <span class="c-kw">int</span>  <span class="c-fn">score</span>() <span class="c-kw">const</span> { <span class="c-kw">return</span> score_; }  <span class="c-com">// const 成员函数：承诺不修改对象；常对象只能调用这类函数</span>
+    <span class="c-kw">void</span> <span class="c-fn">print</span>() <span class="c-kw">const</span>;                    <span class="c-com">// 类内仅声明，定义在类外（必须写 类名:: 指明归属）</span>
+<span class="c-kw">private</span>:
+    <span class="c-kw">int</span> id_ = <span class="c-num">0</span>;                           <span class="c-com">// 访问说明符可多次出现，作用范围到下一个说明符或类结束</span>
+};
+
+<span class="c-kw">void</span> Student::<span class="c-fn">print</span>() <span class="c-kw">const</span> {              <span class="c-com">// 类外定义必须用 类名:: 限定，否则会被当成普通的全局函数</span>
+    cout &lt;&lt; name_ &lt;&lt; <span class="c-str">' '</span> &lt;&lt; score_ &lt;&lt; <span class="c-str">'\n'</span>;
+}
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    Student <span class="c-fn">s</span>(<span class="c-str">"张三"</span>);                     <span class="c-com">// 栈上对象：离开作用域时由编译器自动调用析构函数</span>
+    s.<span class="c-fn">setScore</span>(<span class="c-num">90</span>);
+    s.<span class="c-fn">print</span>();
+    <span class="c-com">// s.score_ = 100;                    // 编译错误：private</span>
+    Student* p = <span class="c-kw">new</span> <span class="c-fn">Student</span>(<span class="c-str">"李四"</span>);      <span class="c-com">// 堆上对象：new 触发构造，必须配对 delete 才会触发析构</span>
+    <span class="c-kw">delete</span> p;
+}</code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>访问属性</th><th>类内成员函数</th><th>派生类</th><th>类外（对象.成员）</th></tr></thead><tbody><tr><td><code>public</code></td><td>✅</td><td>✅</td><td>✅</td></tr><tr><td><code>protected</code></td><td>✅</td><td>✅</td><td>❌</td></tr><tr><td><code>private</code></td><td>✅</td><td>❌</td><td>❌</td></tr></tbody></table></div>
+<ul><li><code>class</code> 默认 <code>private</code>，<code>struct</code> 默认 <code>public</code>（见 4.7）。</li><li><strong>对象</strong>是类的实例；每个对象有独立的数据成员，成员函数代码只有一份，靠隐含的 <code>this</code> 指针区分是谁在调用。</li><li><code>this</code> 是指向当前对象的常量指针（<code>A* const</code>）；常成员函数里是 <code>const A* const</code>。</li></ul>
+<h3 id="sec-16">4.2 构造函数与析构函数全家族（教材 4.3.1 ~ 4.3.5）</h3>
+<p><strong>必须用初始化列表的三种情况</strong>：<code>const</code> 成员、引用成员、没有默认构造函数的类类型成员。初始化列表的顺序<strong>由成员声明顺序决定</strong>，与书写顺序无关。</p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Point {
+    <span class="c-kw">int</span> x_, y_;
+<span class="c-kw">public</span>:
+    <span class="c-fn">Point</span>() : <span class="c-fn">Point</span>(<span class="c-num">0</span>, <span class="c-num">0</span>) { cout &lt;&lt; <span class="c-str">"默认构造(委托)\n"</span>; }  <span class="c-com">// 委托构造（教材 4.3.3）：复用同类另一个构造函数，避免重复初始化代码</span>
+    <span class="c-fn">Point</span>(<span class="c-kw">int</span> x, <span class="c-kw">int</span> y) : <span class="c-fn">x_</span>(x), <span class="c-fn">y_</span>(y) { cout &lt;&lt; <span class="c-str">"带参构造\n"</span>; }
+    <span class="c-fn">Point</span>(<span class="c-kw">const</span> Point&amp; p) : <span class="c-fn">x_</span>(p.x_), <span class="c-fn">y_</span>(p.y_) { cout &lt;&lt; <span class="c-str">"复制构造\n"</span>; }
+    ~<span class="c-fn">Point</span>() { cout &lt;&lt; <span class="c-str">"析构\n"</span>; }
+    <span class="c-kw">void</span> <span class="c-fn">show</span>() <span class="c-kw">const</span> { cout &lt;&lt; x_ &lt;&lt; <span class="c-str">','</span> &lt;&lt; y_ &lt;&lt; <span class="c-str">'\n'</span>; }
+};
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    Point <span class="c-fn">a</span>(<span class="c-num">1</span>, <span class="c-num">2</span>);
+    Point <span class="c-fn">b</span>(a);                                            <span class="c-com">// 复制构造：用一个已有对象初始化新对象（教材 4.3.4 重点）</span>
+    Point c = a;                                           <span class="c-com">// 同样是「定义并初始化」，不是赋值，因此仍调用复制构造函数</span>
+}</code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>函数</th><th>触发时机</th><th>默认行为</th></tr></thead><tbody><tr><td>默认构造函数</td><td><code>A a;</code> / <code>new A</code></td><td>不写任何构造函数时编译器才合成；成员按类内初值/默认初始化</td></tr><tr><td>带参构造函数</td><td><code>A a(1);</code></td><td>一旦写了任意构造函数，默认构造函数就不再自动提供</td></tr><tr><td>委托构造函数</td><td>一个构造函数调用同类的另一个</td><td>C++11，避免重复初始化代码</td></tr><tr><td>析构函数 <code>~A()</code></td><td>对象生命周期结束 / <code>delete</code></td><td>逆序调用成员析构；<strong>不释放指针成员指向的堆内存</strong>，要自己 <code>delete</code></td></tr></tbody></table></div>
+<p><strong>构造顺序</strong>：基类 → 成员对象（按声明顺序）→ 派生类自身；<strong>析构顺序完全相反</strong>。有虚函数时，基类析构函数必须声明为 <code>virtual</code>（见 8.3）。</p>
+<h3 id="sec-17">4.3 ⭐ 复制构造函数 <code>A(const A&amp; a)</code>（教材 4.3.4，你点名的重点）</h3>
+<h4 id="sec-18">4.3.1 签名逐字拆解</h4>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-kw">class</span> A {
+<span class="c-kw">public</span>:
+    <span class="c-fn">A</span>(<span class="c-kw">const</span> A&amp; a);  <span class="c-com">// 复制构造函数：无返回类型、函数名 == 类名、参数是本类 const 引用</span>
+};</code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>部件</th><th>为什么必须这样</th></tr></thead><tbody><tr><td><strong>没有返回类型</strong></td><td>构造函数都不写返回类型，连 <code>void</code> 都不能写</td></tr><tr><td><strong>名字 = 类名 <code>A</code></strong></td><td>构造函数专属规则</td></tr><tr><td><strong>参数必须是 <code>A&amp;</code> 引用</strong></td><td>若写 <code>A(A a)</code>，传参时又要复制实参 → 又要调复制构造 → <strong>无限递归</strong>，编译器直接报错</td></tr><tr><td><strong><code>const</code></strong></td><td>① 不修改源对象；② 能接收 <code>const A</code> 对象和临时对象（右值），否则 <code>A b = makeA();</code> 会失败</td></tr><tr><td>可以带额外参数</td><td><code>A(const A&amp; a, int n = 0)</code> 仍是复制构造，但极少用</td></tr></tbody></table></div>
+<h4 id="sec-19">4.3.2 三种调用时机（必背）</h4>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-com">// 示例 4-3：复制构造函数的三种调用时机（对应教材 4.3.4）</span>
+<span class="c-com">// 观察点：(1) 定义新对象并用已有对象初始化；(2) 实参按值传给形参；</span>
+<span class="c-com">//         (3) 函数按值返回对象 —— 这三种都会调用复制构造函数。</span>
+<span class="c-com">// 易错：z = x 中 z 已存在，走的是复制赋值运算符，不是复制构造。</span>
+<span class="c-com">// 提示：加 -fno-elide-constructors 关闭 RVO，才能看全第 (3) 种的调用。</span>
+
+<span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> A {
+<span class="c-kw">public</span>:
+    <span class="c-fn">A</span>()            { cout &lt;&lt; <span class="c-str">"构造\n"</span>; }
+    <span class="c-fn">A</span>(<span class="c-kw">const</span> A&amp; a)  { cout &lt;&lt; <span class="c-str">"复制构造\n"</span>; }
+    A&amp; <span class="c-kw">operator</span>=(<span class="c-kw">const</span> A&amp; a) { cout &lt;&lt; <span class="c-str">"赋值运算符\n"</span>; <span class="c-kw">return</span> *<span class="c-kw">this</span>; }
+    ~<span class="c-fn">A</span>()           { cout &lt;&lt; <span class="c-str">"析构\n"</span>; }
+};
+
+A <span class="c-fn">makeA</span>()  { A t; <span class="c-kw">return</span> t; }  <span class="c-com">// (3) 返回值（值传递，可能被 RVO 优化掉）</span>
+<span class="c-kw">void</span> <span class="c-fn">use</span>(A a) { }              <span class="c-com">// (2) 值传参</span>
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    A x;
+    A <span class="c-fn">y</span>(x);                    <span class="c-com">// (1) 用一个已存在对象初始化新对象</span>
+    A z = x;                   <span class="c-com">// (1) 同样是初始化，不是赋值</span>
+    <span class="c-fn">use</span>(x);                    <span class="c-com">// (2) 实参 → 形参，值传递</span>
+    A w = <span class="c-fn">makeA</span>();             <span class="c-com">// (3) 返回对象（C++17 起多数被 RVO 省略）</span>
+    z = x;                     <span class="c-com">// × 不调用复制构造：z 已存在，走的是赋值运算符</span>
+}</code></pre></div>
+<div class="callout"><strong>① 与赋值的分界线</strong>：变量<strong>定义并同时给初值</strong> → 复制构造；<strong>已存在的对象</strong>被赋值 → 复制赋值运算符。考试常在这里设陷阱。</div>
+<h4 id="sec-20">4.3.3 默认复制构造 = 浅复制（教材 6.5 提前理解）</h4>
+<p>不写复制构造时，编译器合成一个：对<strong>每个成员逐字节/逐个复制</strong>。指针成员只复制<strong>地址值</strong>，于是两个对象指向同一块堆内存：</p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-com">// 示例 4-4：默认复制构造执行的是浅复制（对应教材 4.3.4 / 6.5）</span>
+<span class="c-com">// 观察点：编译器合成的版本只逐个复制成员，指针成员复制的是「地址值」。</span>
+<span class="c-com">// 结果：a 与 b 的 data_ 指向同一块堆内存，两次析构会 double free。</span>
+<span class="c-com">// 说明：本例只打印地址对比；配套 demo 用安全方式演示，不会真的崩溃。</span>
+
+<span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Shallow {
+    <span class="c-kw">int</span>* data_;
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">Shallow</span>(<span class="c-kw">int</span> n) : <span class="c-fn">data_</span>(<span class="c-kw">new</span> <span class="c-kw">int</span>[n]{}) {}
+    ~<span class="c-fn">Shallow</span>() { <span class="c-kw">delete</span>[] data_; }
+    <span class="c-kw">int</span>* <span class="c-fn">raw</span>() <span class="c-kw">const</span> { <span class="c-kw">return</span> data_; }
+};
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    Shallow <span class="c-fn">a</span>(<span class="c-num">4</span>);
+    Shallow <span class="c-fn">b</span>(a);  <span class="c-com">// 合成版：b.data_ == a.data_</span>
+    cout &lt;&lt; (a.<span class="c-fn">raw</span>() == b.<span class="c-fn">raw</span>() ? <span class="c-str">"地址相同"</span> : <span class="c-str">"地址不同"</span>) &lt;&lt; <span class="c-str">'\n'</span>;
+    <span class="c-com">// 函数结束时 b 先 delete，a 再 delete 同一块 → double free，程序崩溃</span>
+}</code></pre></div>
+<div class="callout"><code>cpp_oop_demo.cpp</code> 的 demo3 用安全方式演示了这一点（不会真崩），可用 <code>-fsanitize=address</code> 复现。</div>
+<h4 id="sec-21">4.3.4 深复制的两种标准写法</h4>
+<p><strong>写法一：传统版（先申请、后释放，异常安全 + 处理自我赋值）</strong></p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-com">// 示例 4-5：手写深复制 —— 传统写法（对应教材 4.3.4 / 6.5）</span>
+<span class="c-com">// 三条规则：(1) 复制构造中重新 new 并复制内容，绝不与源对象共享地址；</span>
+<span class="c-com">//           (2) 赋值运算先判自我赋值，否则 a = a 会先释放自己的资源；</span>
+<span class="c-com">//           (3) 先申请新内存、成功后再 delete 旧的，保证 new 抛异常时对象不变。</span>
+
+<span class="c-pp">#include</span> &lt;cstring&gt;
+<span class="c-pp">#include</span> &lt;cstddef&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Buffer {
+    <span class="c-ty">size_t</span> size_;
+    <span class="c-kw">char</span>*  data_;
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">Buffer</span>(<span class="c-ty">size_t</span> n = <span class="c-num">0</span>) : <span class="c-fn">size_</span>(n), <span class="c-fn">data_</span>(n ? <span class="c-kw">new</span> <span class="c-kw">char</span>[n]{} : <span class="c-kw">nullptr</span>) {}
+
+    <span class="c-fn">Buffer</span>(<span class="c-kw">const</span> Buffer&amp; rhs)                                   <span class="c-com">// 深复制：重新申请内存并复制内容，两个对象各自持有独立资源</span>
+        : <span class="c-fn">size_</span>(rhs.size_), <span class="c-fn">data_</span>(rhs.size_ ? <span class="c-kw">new</span> <span class="c-kw">char</span>[rhs.size_] : <span class="c-kw">nullptr</span>) {
+        <span class="c-kw">if</span> (size_ &gt; <span class="c-num">0</span>) <span class="c-fn">memcpy</span>(data_, rhs.data_, size_);
+    }
+
+    Buffer&amp; <span class="c-kw">operator</span>=(<span class="c-kw">const</span> Buffer&amp; rhs) {
+        <span class="c-kw">if</span> (<span class="c-kw">this</span> != &amp;rhs) {                                     <span class="c-com">// 防自我赋值：a = a 时若先 delete 会把自己的资源释放掉</span>
+            <span class="c-kw">char</span>* tmp = rhs.size_ ? <span class="c-kw">new</span> <span class="c-kw">char</span>[rhs.size_] : <span class="c-kw">nullptr</span>;  <span class="c-com">// 先申请新内存：若 new 抛异常，原对象仍保持原状（强异常安全）</span>
+            <span class="c-kw">if</span> (rhs.size_ &gt; <span class="c-num">0</span>) <span class="c-fn">memcpy</span>(tmp, rhs.data_, rhs.size_);
+            <span class="c-kw">delete</span>[] data_;                                     <span class="c-com">// 新资源就绪后才释放旧资源，避免异常让对象停在半毁状态</span>
+            data_ = tmp; size_ = rhs.size_;
+        }
+        <span class="c-kw">return</span> *<span class="c-kw">this</span>;                                           <span class="c-com">// 返回自身引用，才能支持链式赋值 a = b = c</span>
+    }
+
+    ~<span class="c-fn">Buffer</span>() { <span class="c-kw">delete</span>[] data_; }
+    <span class="c-ty">size_t</span> <span class="c-fn">size</span>() <span class="c-kw">const</span> { <span class="c-kw">return</span> size_; }
+};</code></pre></div>
+<p><strong>写法二：copy-and-swap（更简洁、天然异常安全，推荐）</strong></p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-com">// 示例 4-6：手写深复制 —— copy-and-swap 惯用法（比传统版更简洁）</span>
+<span class="c-com">// 关键：operator= 的形参按值传递，进函数前已由复制构造完成深复制；</span>
+<span class="c-com">//       随后 swap 交换资源，rhs 带着旧资源在函数结束时被析构自动释放。</span>
+<span class="c-com">// 唯一保留 std:: 之处：using std::swap; 不能省，否则会命中成员函数 swap。</span>
+
+<span class="c-pp">#include</span> &lt;utility&gt;
+<span class="c-pp">#include</span> &lt;cstring&gt;
+<span class="c-pp">#include</span> &lt;cstddef&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Buffer {
+    <span class="c-ty">size_t</span> size_ = <span class="c-num">0</span>;
+    <span class="c-kw">char</span>*  data_ = <span class="c-kw">nullptr</span>;
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">Buffer</span>(<span class="c-ty">size_t</span> n = <span class="c-num">0</span>) : <span class="c-fn">size_</span>(n), <span class="c-fn">data_</span>(n ? <span class="c-kw">new</span> <span class="c-kw">char</span>[n]{} : <span class="c-kw">nullptr</span>) {}
+
+    <span class="c-fn">Buffer</span>(<span class="c-kw">const</span> Buffer&amp; rhs)
+        : <span class="c-fn">size_</span>(rhs.size_), <span class="c-fn">data_</span>(rhs.size_ ? <span class="c-kw">new</span> <span class="c-kw">char</span>[rhs.size_] : <span class="c-kw">nullptr</span>) {
+        <span class="c-kw">if</span> (size_ &gt; <span class="c-num">0</span>) <span class="c-fn">memcpy</span>(data_, rhs.data_, size_);
+    }
+
+    <span class="c-kw">void</span> <span class="c-fn">swap</span>(Buffer&amp; o) <span class="c-kw">noexcept</span> {
+        <span class="c-kw">using</span> <span class="c-ty">std</span>::swap;             <span class="c-com">// 唯一例外：这里不能省略 std::，否则名字查找会命中成员函数 swap(Buffer&amp;) 而编译失败</span>
+        <span class="c-fn">swap</span>(size_, o.size_);
+        <span class="c-fn">swap</span>(data_, o.data_);
+    }
+
+    Buffer&amp; <span class="c-kw">operator</span>=(Buffer rhs) {  <span class="c-com">// 按值传参：形参 rhs 已由复制构造生成，深复制在进函数前就完成了</span>
+        <span class="c-fn">swap</span>(rhs);                   <span class="c-com">// 交换后 rhs 持有本对象的旧资源，函数结束时由析构函数自动释放</span>
+        <span class="c-kw">return</span> *<span class="c-kw">this</span>;
+    }
+    ~<span class="c-fn">Buffer</span>() { <span class="c-kw">delete</span>[] data_; }
+};</code></pre></div>
+<div class="callout"><strong>为什么 <code>using std::swap;</code> 不能省</strong>：成员函数本身就叫 <code>swap</code>，非限定名字查找会在类作用域命中 <code>Buffer::swap(Buffer&amp;)</code> 就停下，不会去全局找 <code>std::swap</code>，参数对不上直接编译失败。这是全书唯一保留 <code>std::</code> 的地方。</div>
+<h4 id="sec-22">4.3.5 Rule of Three / Five / Zero</h4>
+<div class="tbl-wrap"><table><thead><tr><th>法则</th><th>内容</th><th>适用</th></tr></thead><tbody><tr><td><strong>Rule of Three</strong></td><td>需要手写「析构 / 复制构造 / 复制赋值」中的任一个，通常三个都要手写</td><td>管理裸资源的类</td></tr><tr><td><strong>Rule of Five</strong> ⭐</td><td>C++11 再加「移动构造 / 移动赋值」，共五个特殊成员函数</td><td>需要高性能移动时</td></tr><tr><td><strong>Rule of Zero</strong> ⭐</td><td>用 <code>vector</code> / <code>string</code> / <code>unique_ptr</code> 等标准库成员管理资源，<strong>什么都不用手写</strong>，编译器合成的版本天然正确</td><td>现代 C++ 首选</td></tr></tbody></table></div>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">vector</span>&gt;
+<span class="c-pp">#include</span> &lt;<span class="c-ty">string</span>&gt;
+<span class="c-pp">#include</span> &lt;cstddef&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Playlist {            <span class="c-com">// Rule of Zero</span>
+    <span class="c-ty">vector</span>&lt;<span class="c-ty">string</span>&gt; songs_;  <span class="c-com">// 资源交给标准库成员管理：编译器合成的复制/移动/析构天然正确（Rule of Zero）</span>
+<span class="c-kw">public</span>:
+    <span class="c-kw">void</span> <span class="c-fn">add</span>(<span class="c-ty">string</span> s) { songs_.<span class="c-fn">push_back</span>(s); }
+    <span class="c-ty">size_t</span> <span class="c-fn">size</span>() <span class="c-kw">const</span> { <span class="c-kw">return</span> songs_.<span class="c-fn">size</span>(); }
+    <span class="c-com">// 五个特殊成员函数全部由编译器生成，且天然正确</span>
+};</code></pre></div>
+<div class="callout">教材只在 4.3.6 简单提了移动构造；Rule of Five / Zero 属<strong>⭐ 超纲</strong>，写在这里是为了让你知道「现代工程里更推荐别手写复制构造」。考试仍按教材要求写深复制。</div>
+<h4 id="sec-23">4.3.6 高频易错点</h4>
+<ol><li><code>A a();</code> 是<strong>函数声明</strong>不是定义对象（most vexing parse）；写 <code>A a;</code> 或 <code>A a{};</code>。</li><li><code>A b = a;</code> 是复制构造，<code>b = a;</code> 是赋值 —— 别混。</li><li>复制构造参数写成 <code>A(A a)</code> 会无限递归，必须 <code>const A&amp;</code>。</li><li>类里有指针成员 + 手写析构，一定要检查三个法则。</li><li>复制构造里别忘记初始化<strong>所有</strong>成员，尤其新增成员时。</li><li>返回值优化（RVO/NRVO）会省略复制构造，<strong>别把副作用写进复制构造函数</strong>（例如靠打印计数判断调用次数会不准）。</li><li>派生类的复制构造要显式调用基类：<code>D(const D&amp; d) : B(d), member_(d.member_) {}</code>（教材 7.4.2）。</li></ol>
+<h3 id="sec-24">4.4 移动构造与 <code>default</code> / <code>delete</code>（教材 4.3.6 ~ 4.3.7）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;utility&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> A {
+<span class="c-kw">public</span>:
+    <span class="c-fn">A</span>() = <span class="c-kw">default</span>;                                            <span class="c-com">// = default：显式要求编译器按默认规则生成该特殊成员函数</span>
+    <span class="c-fn">A</span>(<span class="c-kw">const</span> A&amp;) = <span class="c-kw">default</span>;                                    <span class="c-com">// = default 生成的仍是浅复制；含裸指针时不要这样写</span>
+    <span class="c-com">// A(const A&amp;) = delete;                                  // 二选一：与上一行只能留一个，否则重复声明会编译报错</span>
+    <span class="c-fn">A</span>(A&amp;&amp; rhs) <span class="c-kw">noexcept</span> { <span class="c-com">/* 窃取 rhs 资源，把 rhs 置空 */</span> }  <span class="c-com">// 移动构造 A(A&amp;&amp;)：接管右值对象的资源，不复制；教材 4.3.6</span>
+    A&amp; <span class="c-kw">operator</span>=(A&amp;&amp; rhs) <span class="c-kw">noexcept</span> { <span class="c-kw">return</span> *<span class="c-kw">this</span>; }          <span class="c-com">// 移动赋值：释放自身旧资源后接管右值资源，通常标 noexcept</span>
+};</code></pre></div>
+<ul><li><strong>移动构造 <code>A(A&amp;&amp;)</code></strong>：参数是右值引用，直接「接管」临时对象的资源而不复制，典型场景 <code>vector</code> 扩容、<code>std::move</code>。</li><li><code>= default</code> 只能用于特殊成员函数；<code>= delete</code> 可用于任意函数，用来禁止某些调用（如 <code>unique_ptr</code> 禁止复制）。</li><li>⭐ 移动语义、<code>noexcept</code>、智能指针、RAII 在教材里只是浅尝，原版手册第 4 章讲得较深，<strong>入门课选读</strong>。</li></ul>
+<h3 id="sec-25">4.5 ➕ 类的组合与前向引用声明（教材 4.4，原版缺）</h3>
+<p><strong>组合</strong>：一个类的数据成员是另一个类的对象（<code>has-a</code>）。</p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Engine {
+<span class="c-kw">public</span>:
+    <span class="c-fn">Engine</span>() { cout &lt;&lt; <span class="c-str">"Engine 构造\n"</span>; }
+    ~<span class="c-fn">Engine</span>() { cout &lt;&lt; <span class="c-str">"Engine 析构\n"</span>; }
+};
+
+<span class="c-kw">class</span> Car {
+    Engine engine_;  <span class="c-com">// 组合成员（has-a）：构造时先于本类、按声明顺序初始化</span>
+    <span class="c-kw">int</span>    wheels_;
+<span class="c-kw">public</span>:
+    <span class="c-fn">Car</span>() : <span class="c-fn">engine_</span>(), <span class="c-fn">wheels_</span>(<span class="c-num">4</span>) { cout &lt;&lt; <span class="c-str">"Car 构造\n"</span>; }
+    ~<span class="c-fn">Car</span>() { cout &lt;&lt; <span class="c-str">"Car 析构\n"</span>; }
+};                   <span class="c-com">// 构造顺序：组合成员 → 本类；析构顺序严格相反</span>
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() { Car c; }</code></pre></div>
+<ul><li>组合成员的初始化<strong>必须放在初始化列表</strong>（若它没有默认构造函数，则必须在列表中显式给参数）。</li><li>构造顺序：组合成员按<strong>声明顺序</strong>先构造，再执行本类构造函数体；析构严格逆序。</li><li><strong>判断口诀</strong>：<code>is-a</code> 用继承，<code>has-a</code> 用组合；能组合就别继承（教材 7.8.1 会再讲）。</li></ul>
+<p><strong>前向引用声明</strong>：<code>class B;</code> 只告诉编译器「B 是个类」，用于打破相互引用。</p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-kw">class</span> B;                          <span class="c-com">// 前向声明：只告诉编译器「B 是个类」，此时 B 仍是不完整类型</span>
+<span class="c-kw">class</span> A {
+    B* pb_;                       <span class="c-com">// ✅ 可以：指针/引用的大小与 B 的定义无关</span>
+    B&amp; rb_;                       <span class="c-com">// ✅ 可以（引用成员必须在初始化列表初始化）</span>
+<span class="c-kw">public</span>:
+    <span class="c-fn">A</span>(B* p, B&amp; r) : <span class="c-fn">pb_</span>(p), <span class="c-fn">rb_</span>(r) {}
+    <span class="c-com">// void f() { pb_-&gt;g(); }  // ❌ 不完整类型，不能访问 B 的成员</span>
+    <span class="c-com">// B b_;                    // ❌ 不能定义对象，编译器不知道要分配多少内存</span>
+};
+
+<span class="c-kw">class</span> B { <span class="c-kw">public</span>: <span class="c-kw">void</span> <span class="c-fn">g</span>() {} };  <span class="c-com">// 完整定义之后才能使用 B 的成员</span></code></pre></div>
+<div class="callout">常考结论：前向声明<strong>只能</strong>用于声明指针、引用、函数参数/返回类型；不能定义对象、不能访问成员、不能做 <code>sizeof</code>。</div>
+<h3 id="sec-26">4.6 ➕ UML 图形标识（教材 4.5，原版缺）</h3>
+<p>UML 类图用<strong>三段矩形</strong>表示类：</p>
+<div class="code-block"><div class="code-head"><span class="lang">TEXT</span><button class="copy-btn" type="button">复制代码</button></div><pre><code>┌───────────────────────────┐
+│         Student           │  ← 类名（斜体 = 抽象类）
+├───────────────────────────┤
+│ - name : string           │  ← 属性（数据成员）
+│ - score : int = 0         │
+├───────────────────────────┤
+│ + Student(n : string)     │  ← 操作（成员函数）
+│ + setScore(s : int) : void│
+│ + score() : int {const}   │
+└───────────────────────────┘</code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>符号</th><th>含义</th></tr></thead><tbody><tr><td><code>+</code> / <code>-</code> / <code>#</code></td><td><code>public</code> / <code>private</code> / <code>protected</code></td></tr><tr><td>斜体类名 / 斜体方法</td><td>抽象类 / 纯虚函数</td></tr><tr><td>实线 + 空心三角（指向父类）</td><td><strong>继承</strong>（泛化 generalization）</td></tr><tr><td>实线 + 空心菱形（指向整体）</td><td><strong>聚合</strong>：弱拥有，部分可独立存在</td></tr><tr><td>实线 + 实心菱形（指向整体）</td><td><strong>组合</strong>：强拥有，生命周期一致</td></tr><tr><td>实线 + 箭头 / 普通实线</td><td>关联 / 依赖（虚线箭头）</td></tr><tr><td>数字 <code>1</code>、<code>0..*</code>、<code>1..*</code></td><td>多重性</td></tr></tbody></table></div>
+<div class="callout">教材 4.5.2 的读图题常问「A 与 B 是什么关系」「某个成员可见性」——记住<strong>空心三角=继承、实心菱形=组合</strong>就能拿分。</div>
+<h3 id="sec-27">4.7 ➕ 结构体、联合体、枚举、位域（教材 4.6 / 4.7 / 4.9.1，原版缺）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">struct</span> Point {                            <span class="c-com">// struct 默认 public</span>
+    <span class="c-kw">int</span> x, y;                             <span class="c-com">// class 里这两行会是 private</span>
+};
+
+<span class="c-kw">union</span> Value {                             <span class="c-com">// union 的所有成员共用同一块内存：改写一个成员会覆盖其他成员</span>
+    <span class="c-kw">int</span>   i;
+    <span class="c-kw">float</span> f;
+    <span class="c-kw">char</span>  c[<span class="c-num">4</span>];
+};                                        <span class="c-com">// sizeof(Value) == 最大成员的大小</span>
+
+<span class="c-kw">enum</span> Color { RED, GREEN, BLUE };          <span class="c-com">// 不限定作用域枚举，RED 会泄漏到外层作用域</span>
+<span class="c-kw">enum</span> <span class="c-kw">class</span> Level { LOW = <span class="c-num">1</span>, HIGH = <span class="c-num">10</span> };  <span class="c-com">// C++11 作用域枚举，必须写 Level::LOW</span>
+
+<span class="c-kw">struct</span> Flags {                            <span class="c-com">// 位域（教材 4.9.1）：按 bit 而非字节分配成员，常用于标志位压缩</span>
+    <span class="c-kw">unsigned</span> <span class="c-kw">int</span> readable   : <span class="c-num">1</span>;
+    <span class="c-kw">unsigned</span> <span class="c-kw">int</span> writable   : <span class="c-num">1</span>;
+    <span class="c-kw">unsigned</span> <span class="c-kw">int</span> mode       : <span class="c-num">3</span>;          <span class="c-com">// 只能存 0~7</span>
+};
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    Point p{<span class="c-num">1</span>, <span class="c-num">2</span>};
+    Value v; v.i = <span class="c-num">65</span>;
+    cout &lt;&lt; v.c[<span class="c-num">0</span>] &lt;&lt; <span class="c-str">'\n'</span>;               <span class="c-com">// 同一块内存被按 char 解读</span>
+    cout &lt;&lt; <span class="c-kw">sizeof</span>(Value) &lt;&lt; <span class="c-str">' '</span> &lt;&lt; <span class="c-kw">sizeof</span>(Flags) &lt;&lt; <span class="c-str">'\n'</span>;
+    Level l = Level::HIGH;                <span class="c-com">// 不限定作用域枚举不能这样写</span>
+}</code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>对比</th><th><code>struct</code></th><th><code>class</code></th></tr></thead><tbody><tr><td>默认访问权限</td><td><code>public</code></td><td><code>private</code></td></tr><tr><td>默认继承方式</td><td><code>public</code></td><td><code>private</code></td></tr><tr><td>其他</td><td><strong>完全相同</strong>（都能有构造、析构、虚函数、继承）</td><td>同左</td></tr></tbody></table></div>
+<div class="callout">易错：<code>class D : B</code> 默认是<strong>私有继承</strong>，<code>struct D : B</code> 默认是公有继承（教材 7.2）。</div>
+<h3 id="sec-28">4.8 构造类型转换与对象传递方式（教材 4.9.2 / 4.9.3）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> A {
+    <span class="c-kw">int</span> v_;
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">A</span>(<span class="c-kw">int</span> v) : <span class="c-fn">v_</span>(v) {}
+    <span class="c-kw">int</span> <span class="c-fn">get</span>() <span class="c-kw">const</span> { <span class="c-kw">return</span> v_; }
+};
+
+<span class="c-kw">void</span> <span class="c-fn">f</span>(<span class="c-kw">const</span> A&amp; a) { cout &lt;&lt; a.<span class="c-fn">get</span>() &lt;&lt; <span class="c-str">'\n'</span>; }
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    A <span class="c-fn">a</span>(<span class="c-num">1</span>);
+    <span class="c-com">// f(5);        // ❌ explicit 禁止 int → A 的隐式转换</span>
+    <span class="c-fn">f</span>(<span class="c-fn">A</span>(<span class="c-num">5</span>));  <span class="c-com">// ✅ 显式构造</span>
+    <span class="c-com">// A b = 5;     // ❌ 去掉 explicit 才允许（教材 4.9.2）</span>
+}</code></pre></div>
+<ul><li><strong>单参数构造函数</strong>定义了「其他类型 → 本类」的隐式转换；加 <code>explicit</code> 可关闭，避免 <code>f(5)</code> 这种意外转换。</li><li><strong>对象作为函数参数</strong>：值传递触发复制构造 → 用 <code>const A&amp;</code>；<strong>作为返回值</strong>：值返回可能触发复制构造，但编译器通常做 RVO/NRVO 优化；返回局部对象的引用/指针是严重错误。</li></ul>
+<hr>
+<h2 id="sec-29">5. 第 5 章 数据的共享与保护【核心】</h2>
+<h3 id="sec-30">5.1 ➕ 作用域、可见性与生存期（教材 5.1 / 5.2，原版缺）</h3>
+<div class="tbl-wrap"><table><thead><tr><th>作用域</th><th>范围</th></tr></thead><tbody><tr><td>函数原型作用域</td><td>函数声明中形参名只在声明内有效</td></tr><tr><td>块作用域</td><td><code>{}</code> 内声明，从声明处到块结束</td></tr><tr><td>类作用域</td><td>类的成员在整个类内可见，类外用 <code>类名::</code> 或 <code>对象.</code></td></tr><tr><td>命名空间作用域</td><td>命名空间/全局，跨文件可用 <code>extern</code> 声明</td></tr></tbody></table></div>
+<p><strong>可见性规则</strong>：内层同名标识符<strong>屏蔽</strong>外层；被屏蔽的外层名字可用 <code>::name</code>（全局）或 <code>Base::f()</code>（基类）访问。</p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">int</span> x = <span class="c-num">1</span>;                            <span class="c-com">// 命名空间作用域，静态生存期</span>
+<span class="c-kw">void</span> <span class="c-fn">f</span>() {
+    <span class="c-kw">int</span> x = <span class="c-num">2</span>;                        <span class="c-com">// 屏蔽全局 x</span>
+    cout &lt;&lt; x &lt;&lt; <span class="c-str">' '</span> &lt;&lt; ::x &lt;&lt; <span class="c-str">'\n'</span>;  <span class="c-com">// 2 1</span>
+    <span class="c-kw">static</span> <span class="c-kw">int</span> count = <span class="c-num">0</span>;             <span class="c-com">// 静态生存期：只初始化一次，跨调用保留</span>
+    cout &lt;&lt; ++count &lt;&lt; <span class="c-str">'\n'</span>;
+}
+<span class="c-kw">int</span> <span class="c-fn">main</span>() { <span class="c-fn">f</span>(); <span class="c-fn">f</span>(); }              <span class="c-com">// 输出 2 1 / 1 / 2 1 / 2</span></code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>生存期</th><th>对象</th><th>初始化时机</th></tr></thead><tbody><tr><td><strong>静态生存期</strong></td><td>全局变量、<code>static</code> 局部变量、类的静态数据成员</td><td>程序首次执行到定义处（全局在 main 前）</td></tr><tr><td><strong>动态生存期</strong></td><td>局部自动对象、<code>new</code> 出来的对象</td><td>声明处 / <code>new</code> 处；结束于 <code>}</code> / <code>delete</code></td></tr></tbody></table></div>
+<h3 id="sec-31">5.2 静态成员与友元（教材 5.3 / 5.4，原版 1.6 已覆盖）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Counter {
+    <span class="c-kw">static</span> <span class="c-kw">int</span> total_;                     <span class="c-com">// 静态数据成员属于类而非对象：全类只有一份，必须在类外定义一次</span>
+    <span class="c-kw">int</span> id_;
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">Counter</span>(<span class="c-kw">int</span> id) : <span class="c-fn">id_</span>(id) { ++total_; }
+    <span class="c-kw">static</span> <span class="c-kw">int</span> <span class="c-fn">total</span>() { <span class="c-kw">return</span> total_; }  <span class="c-com">// 静态函数成员没有 this：只能访问静态成员，不能是 const / virtual</span>
+    <span class="c-kw">friend</span> <span class="c-kw">void</span> <span class="c-fn">peek</span>(<span class="c-kw">const</span> Counter&amp; c);    <span class="c-com">// 友元函数不是成员函数，但被授权访问本类私有成员（单向、不可继承）</span>
+};
+<span class="c-kw">int</span> Counter::total_ = <span class="c-num">0</span>;                   <span class="c-com">// 静态数据成员必须在某个 .cpp 中类外定义一次；写在头文件里会被重复定义</span>
+
+<span class="c-kw">void</span> <span class="c-fn">peek</span>(<span class="c-kw">const</span> Counter&amp; c) { cout &lt;&lt; c.id_ &lt;&lt; <span class="c-str">'\n'</span>; }
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    Counter <span class="c-fn">a</span>(<span class="c-num">1</span>), <span class="c-fn">b</span>(<span class="c-num">2</span>);
+    cout &lt;&lt; Counter::<span class="c-fn">total</span>() &lt;&lt; <span class="c-str">'\n'</span>;      <span class="c-com">// 2，也可写 a.total()</span>
+    <span class="c-fn">peek</span>(a);
+}</code></pre></div>
+<ul><li>静态数据成员<strong>不属于任何对象</strong>，<code>sizeof(对象)</code> 不含它；必须在类外定义一次。</li><li>静态函数成员没有 <code>this</code>，不能调用非静态成员，也不能是 <code>const</code> / <code>virtual</code>。</li><li><strong>友元</strong>：<code>friend</code> 破坏了封装，是单向、不可继承、不可传递的。友元类 <code>friend class B;</code> 让 B 的所有成员函数都能访问本类私有成员。</li></ul>
+<h3 id="sec-32">5.3 ➕ 常对象、常成员、常引用（教材 5.5，原版部分覆盖）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> A {
+    <span class="c-kw">int</span> v_;
+    <span class="c-kw">mutable</span> <span class="c-kw">int</span> calls_ = <span class="c-num">0</span>;                    <span class="c-com">// mutable 成员是例外：即使在 const 成员函数里也允许修改（常用于缓存/计数）</span>
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">A</span>(<span class="c-kw">int</span> v) : <span class="c-fn">v_</span>(v) {}
+    <span class="c-kw">int</span>  <span class="c-fn">get</span>() <span class="c-kw">const</span> { ++calls_; <span class="c-kw">return</span> v_; }  <span class="c-com">// const 成员函数：承诺不修改对象；常对象只能调用这类函数</span>
+    <span class="c-kw">void</span> <span class="c-ty">set</span>(<span class="c-kw">int</span> v) { v_ = v; }                <span class="c-com">// 非常成员函数</span>
+};
+
+<span class="c-kw">void</span> <span class="c-fn">show</span>(<span class="c-kw">const</span> A&amp; a) {                        <span class="c-com">// const 引用作参数：不复制、不可改，还能绑定临时对象（教材 5.5.3）</span>
+    cout &lt;&lt; a.<span class="c-fn">get</span>() &lt;&lt; <span class="c-str">'\n'</span>;
+    <span class="c-com">// a.set(3);                // ❌ 常对象只能调用常成员函数</span>
+}
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    <span class="c-kw">const</span> A <span class="c-fn">a</span>(<span class="c-num">5</span>);                              <span class="c-com">// 常对象必须在定义时初始化，且此后只能调用 const 成员函数</span>
+    <span class="c-fn">show</span>(a);
+    A <span class="c-fn">b</span>(<span class="c-num">1</span>);
+    <span class="c-fn">show</span>(b);                                   <span class="c-com">// 非常对象也能绑定 const 引用</span>
+}</code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>形式</th><th>含义</th></tr></thead><tbody><tr><td><code>const A a(5);</code></td><td>常对象，只能调用常成员函数</td></tr><tr><td><code>int f() const;</code></td><td>常成员函数，不能修改非 <code>mutable</code> 数据成员，也不能调用非常成员函数</td></tr><tr><td><code>const int* p</code> / <code>int* const p</code></td><td>指向常量的指针 / 常量指针（看 <code>const</code> 在 <code>*</code> 哪侧）</td></tr><tr><td><code>const A&amp;</code></td><td>常引用，类对象传参首选</td></tr><tr><td><code>mutable</code></td><td>允许在常成员函数里修改（如缓存、访问计数）</td></tr></tbody></table></div>
+<div class="callout"><strong>声明原则（教材 5.8.1）</strong>：不修改数据成员的成员函数<strong>一律加 <code>const</code></strong>，否则常对象/常引用用不了它。<code>const</code> 也是函数重载的区分依据。</div>
+<h3 id="sec-33">5.4 ➕ 多文件结构与编译预处理（教材 5.6，原版缺）</h3>
+<p>一个典型工程按「<strong>声明放 .h，定义放 .cpp</strong>」组织：</p>
+<div class="code-block"><div class="code-head"><span class="lang">TEXT</span><button class="copy-btn" type="button">复制代码</button></div><pre><code>Point.h      → class Point { ... }; 成员函数声明
+Point.cpp    → #include "Point.h" + 成员函数定义
+main.cpp     → #include "Point.h" + 使用 Point</code></pre></div>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-com">// Point.h —— 头文件保护，防止同一编译单元重复包含</span>
+<span class="c-pp">#ifndef</span> POINT_H
+<span class="c-pp">#define</span> POINT_H
+<span class="c-kw">class</span> Point {
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">Point</span>(<span class="c-kw">int</span> x);
+    <span class="c-kw">int</span> <span class="c-fn">get</span>() <span class="c-kw">const</span>;
+<span class="c-kw">private</span>:
+    <span class="c-kw">int</span> x_;
+};
+<span class="c-pp">#endif</span></code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>预处理命令</th><th>作用</th></tr></thead><tbody><tr><td><code>#include &lt;...&gt;</code> / <code>#include "..."</code></td><td>尖括号找系统库，双引号先找当前目录</td></tr><tr><td><code>#define</code> / <code>#undef</code></td><td>宏定义 / 取消；<strong>没有类型检查</strong>，能用 <code>const</code>/<code>inline</code> 就别用宏</td></tr><tr><td><code>#ifndef</code> / <code>#define</code> / <code>#endif</code></td><td>头文件保护（或 <code>#pragma once</code>）</td></tr><tr><td><code>#ifdef</code> / <code>#if</code> / <code>#else</code></td><td>条件编译，常用于跨平台与调试开关</td></tr><tr><td><code>extern int g;</code></td><td><strong>声明</strong>外部变量（不分配内存）；定义在且仅在一个 .cpp 中</td></tr></tbody></table></div>
+<div class="callout"><strong>5.8.2 编译、连接与执行</strong>：预处理 → 编译（每个 .cpp 单独生成 .obj，此时只检查声明）→ 连接（把各 .obj 和库拼起来，解析外部符号）→ 运行。常见错误「unresolved external symbol」就是<strong>声明了但没定义</strong>，属于连接期错误，不是编译错误。</div>
+<hr>
+<h2 id="sec-34">6. 第 6 章 数组、指针与字符串（衔接章）</h2>
+<h3 id="sec-35">6.1 ➕ 对象数组、对象指针、动态内存分配（教材 6.1.4 / 6.2.11 / 6.3，原版缺）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-pp">#include</span> &lt;<span class="c-ty">vector</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> A {
+    <span class="c-kw">int</span> v_;
+<span class="c-kw">public</span>:
+    <span class="c-fn">A</span>() : <span class="c-fn">v_</span>(<span class="c-num">0</span>) { cout &lt;&lt; <span class="c-str">"默认构造\n"</span>; }
+    <span class="c-kw">explicit</span> <span class="c-fn">A</span>(<span class="c-kw">int</span> v) : <span class="c-fn">v_</span>(v) { cout &lt;&lt; <span class="c-str">"构造 "</span> &lt;&lt; v &lt;&lt; <span class="c-str">'\n'</span>; }
+    <span class="c-kw">void</span> <span class="c-fn">show</span>() <span class="c-kw">const</span> { cout &lt;&lt; v_ &lt;&lt; <span class="c-str">'\n'</span>; }
+};
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    A arr[<span class="c-num">3</span>];                    <span class="c-com">// 对象数组需要默认构造函数：每个元素各调用一次，共 3 次</span>
+    A arr2[<span class="c-num">2</span>] = { <span class="c-fn">A</span>(<span class="c-num">1</span>), <span class="c-fn">A</span>(<span class="c-num">2</span>) };  <span class="c-com">// 用初始化列表指定初值</span>
+
+    A* p = &amp;arr2[<span class="c-num">0</span>];             <span class="c-com">// 对象指针</span>
+    p-&gt;<span class="c-fn">show</span>();                   <span class="c-com">// 等价于 (*p).show()</span>
+    (p + <span class="c-num">1</span>)-&gt;<span class="c-fn">show</span>();             <span class="c-com">// 对象指针也支持算术运算</span>
+
+    A* q = <span class="c-kw">new</span> <span class="c-fn">A</span>(<span class="c-num">9</span>);             <span class="c-com">// new 分两步：先分配内存，再自动调用构造函数初始化对象</span>
+    q-&gt;<span class="c-fn">show</span>();
+    <span class="c-kw">delete</span> q;                    <span class="c-com">// delete 也分两步：先调用析构函数，再释放内存</span>
+
+    A* list = <span class="c-kw">new</span> A[<span class="c-num">3</span>];          <span class="c-com">// 数组形式：调用 3 次默认构造</span>
+    <span class="c-kw">delete</span>[] list;               <span class="c-com">// new[] 必须配对 delete[]，混用 delete 是未定义行为（教材 6.3）</span>
+
+    <span class="c-ty">vector</span>&lt;A&gt; <span class="c-fn">v</span>(<span class="c-num">2</span>);              <span class="c-com">// 教材 6.4：vector 创建数组对象，自动管理内存</span>
+}</code></pre></div>
+<div class="callout">必背配对：<code>new</code> ↔ <code>delete</code>，<code>new[]</code> ↔ <code>delete[]</code>。混用是考试与工程里的经典错误。</div>
+<h3 id="sec-36">6.2 ⭐ 深复制与浅复制（教材 6.5，原版 3.3 / 3.4）</h3>
+<p><strong>教材位置提醒</strong>：这一节在第 6 章，但它讲的就是 4.3.4 默认复制构造的行为，务必连起来看。</p>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>浅复制</th><th>深复制</th></tr></thead><tbody><tr><td>行为</td><td>只复制指针<strong>地址值</strong></td><td>重新申请内存并复制<strong>内容</strong></td></tr><tr><td>结果</td><td>两个对象共享同一块堆内存</td><td>两个对象各自独立</td></tr><tr><td>释放</td><td>第二次 <code>delete</code> 同一地址 → <strong>double free / 崩溃</strong></td><td>各释放各的，安全</td></tr><tr><td>产生方式</td><td>编译器合成的默认复制构造</td><td>手写复制构造 + 复制赋值运算符</td></tr><tr><td>典型触发</td><td>类含 <code>new</code> 出来的裸指针成员</td><td>需要「三法则」/ Rule of Zero</td></tr></tbody></table></div>
+<p>完整可运行的深复制 <code>Buffer</code> 类请直接看 <strong>4.3.4</strong>（传统版 + copy-and-swap 两版），或 <code>cpp_oop_demo.cpp</code> 的 demo4。</p>
+<div class="callout">教材 6.8.2 讲「指针安全隐患」、6.8.3 讲 <code>const_cast</code>；现代解法是 5.3 的 <code>const</code> 正确性 + 智能指针（⭐ 超纲）。</div>
+<h3 id="sec-37">6.3 <code>string</code> 类（教材 6.6.2）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-pp">#include</span> &lt;<span class="c-ty">string</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    <span class="c-ty">string</span> s = <span class="c-str">"Hello"</span>;
+    s += <span class="c-str">" C++"</span>;
+    cout &lt;&lt; s.<span class="c-fn">size</span>() &lt;&lt; <span class="c-str">' '</span> &lt;&lt; s[<span class="c-num">0</span>] &lt;&lt; <span class="c-str">' '</span> &lt;&lt; s.<span class="c-fn">substr</span>(<span class="c-num">0</span>, <span class="c-num">5</span>) &lt;&lt; <span class="c-str">'\n'</span>;
+    <span class="c-ty">string</span> t = s;                     <span class="c-com">// string 已自行实现深复制：直接赋值即可，不必像裸指针那样手写复制构造</span>
+    t[<span class="c-num">0</span>] = <span class="c-str">'h'</span>;
+    cout &lt;&lt; s &lt;&lt; <span class="c-str">" / "</span> &lt;&lt; t &lt;&lt; <span class="c-str">'\n'</span>;  <span class="c-com">// 互不影响</span>
+}</code></pre></div>
+<div class="callout">对比 6.6.1 的 C 风格字符数组：<code>char s[] = "abc";</code> 需要自己管长度、<code>strcpy</code>、结尾 <code>'\0'</code>，容易越界。<strong>教材用这个对比引出「为什么需要类」</strong>。</div>
+<hr>
+<h2 id="sec-38">7. 第 7 章 类的继承【核心】</h2>
+<h3 id="sec-39">7.1 派生类的定义与生成过程（教材 7.1）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Base {
+<span class="c-kw">protected</span>:
+    <span class="c-kw">int</span> b_;
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">Base</span>(<span class="c-kw">int</span> b) : <span class="c-fn">b_</span>(b) { cout &lt;&lt; <span class="c-str">"Base 构造\n"</span>; }
+    <span class="c-kw">virtual</span> ~<span class="c-fn">Base</span>() { cout &lt;&lt; <span class="c-str">"Base 析构\n"</span>; }               <span class="c-com">// 基类析构必须 virtual：否则通过基类指针 delete 时派生部分不会被析构</span>
+    <span class="c-kw">void</span> <span class="c-fn">f</span>() <span class="c-kw">const</span> { cout &lt;&lt; <span class="c-str">"Base::f "</span> &lt;&lt; b_ &lt;&lt; <span class="c-str">'\n'</span>; }
+};
+
+<span class="c-kw">class</span> Derived : <span class="c-kw">public</span> Base {
+    <span class="c-kw">int</span> d_;
+<span class="c-kw">public</span>:
+    <span class="c-fn">Derived</span>(<span class="c-kw">int</span> b, <span class="c-kw">int</span> d) : <span class="c-fn">Base</span>(b), <span class="c-fn">d_</span>(d) { cout &lt;&lt; <span class="c-str">"Derived 构造\n"</span>; }
+    ~<span class="c-fn">Derived</span>() <span class="c-kw">override</span> { cout &lt;&lt; <span class="c-str">"Derived 析构\n"</span>; }
+    <span class="c-kw">void</span> <span class="c-fn">f</span>() <span class="c-kw">const</span> { cout &lt;&lt; <span class="c-str">"Derived::f "</span> &lt;&lt; d_ &lt;&lt; <span class="c-str">'\n'</span>; }  <span class="c-com">// 名字隐藏：派生类的同名函数会遮蔽基类所有 f 重载（不是重写，也不是重载）</span>
+};</code></pre></div>
+<p><strong>派生类生成过程（教材 7.1.3）</strong>：① 吸收基类成员（构造/析构除外）→ ② 改造基类成员（访问控制、名字隐藏）→ ③ 添加新成员。</p>
+<h3 id="sec-40">7.2 三种继承方式的访问控制（教材 7.2）</h3>
+<div class="tbl-wrap"><table><thead><tr><th>基类成员 \ 继承方式</th><th><code>public</code> 继承</th><th><code>protected</code> 继承</th><th><code>private</code> 继承</th></tr></thead><tbody><tr><td><code>public</code></td><td><code>public</code></td><td><code>protected</code></td><td><code>private</code></td></tr><tr><td><code>protected</code></td><td><code>protected</code></td><td><code>protected</code></td><td><code>private</code></td></tr><tr><td><code>private</code></td><td>不可直接访问</td><td>不可直接访问</td><td>不可直接访问</td></tr></tbody></table></div>
+<div class="callout">记忆：取「基类权限」与「继承方式」中<strong>更严格</strong>的那个；基类 <code>private</code> 永远不可直接访问（但可通过基类 <code>public</code>/<code>protected</code> 接口间接访问）。<code>class D : B</code> 默认 <code>private</code> 继承，<code>struct</code> 默认 <code>public</code>。</div>
+<h3 id="sec-41">7.3 ➕ 类型兼容规则（教材 7.3，原版以「对象切片」部分覆盖）</h3>
+<p>在 <code>public</code> 继承下，<strong>派生类对象可以当作基类对象用</strong>（向上转型，安全）：</p>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> B { <span class="c-kw">public</span>: <span class="c-kw">virtual</span> <span class="c-kw">void</span> <span class="c-fn">f</span>() <span class="c-kw">const</span> { cout &lt;&lt; <span class="c-str">"B\n"</span>; } <span class="c-kw">virtual</span> ~<span class="c-fn">B</span>() = <span class="c-kw">default</span>; };
+<span class="c-kw">class</span> D : <span class="c-kw">public</span> B { <span class="c-kw">public</span>: <span class="c-kw">void</span> <span class="c-fn">f</span>() <span class="c-kw">const</span> <span class="c-kw">override</span> { cout &lt;&lt; <span class="c-str">"D\n"</span>; } <span class="c-kw">void</span> <span class="c-fn">g</span>() <span class="c-kw">const</span> {} };
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    D d;
+    B  b  = d;   <span class="c-com">// ✅ 派生类对象 → 基类对象：发生【对象切片】，d 的独有部分被切掉</span>
+    B* p  = &amp;d;  <span class="c-com">// ✅ 基类指针指向派生类对象（多态的前提）</span>
+    B&amp; r  = d;   <span class="c-com">// ✅ 基类引用绑定派生类对象</span>
+    p-&gt;<span class="c-fn">f</span>();      <span class="c-com">// 动态绑定：p 的静态类型是 B*，运行期经 vtable 调用到 D::f</span>
+    <span class="c-com">// p-&gt;g();         // ❌ 通过基类指针只能访问基类成员</span>
+    <span class="c-com">// D* q = &amp;b;      // ❌ 反过来不行：基类对象不是派生类对象</span>
+}</code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>方向</th><th>是否允许</th><th>说明</th></tr></thead><tbody><tr><td>派生 → 基类（对象赋值/指针/引用）</td><td>✅</td><td>公有继承下的类型兼容</td></tr><tr><td>基类 → 派生（隐式）</td><td>❌</td><td>需要 <code>dynamic_cast</code> 且对象本身确实是派生类（教材 7.8.3 / 8.7.2）</td></tr></tbody></table></div>
+<h3 id="sec-42">7.4 派生类的构造、复制构造与析构（教材 7.4）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-com">// 示例 7-4：派生类的构造、复制构造与析构顺序（对应教材 7.4）</span>
+<span class="c-com">// 易错：派生类复制构造必须在初始化列表显式写 B(o)，</span>
+<span class="c-com">//       否则编译器改调用基类默认构造函数，基类部分就没有被复制。</span>
+<span class="c-com">// 顺序：构造 B → D，析构 D → B；复制构造同样先 B(o) 再复制派生部分。</span>
+
+<span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> B {
+    <span class="c-kw">int</span> b_;
+<span class="c-kw">public</span>:
+    <span class="c-fn">B</span>() : <span class="c-fn">b_</span>(<span class="c-num">0</span>) {}
+    <span class="c-kw">explicit</span> <span class="c-fn">B</span>(<span class="c-kw">int</span> b) : <span class="c-fn">b_</span>(b) {}
+    <span class="c-fn">B</span>(<span class="c-kw">const</span> B&amp; o) : <span class="c-fn">b_</span>(o.b_) { cout &lt;&lt; <span class="c-str">"B 复制构造\n"</span>; }
+    <span class="c-kw">virtual</span> ~<span class="c-fn">B</span>() { cout &lt;&lt; <span class="c-str">"B 析构\n"</span>; }
+};
+
+<span class="c-kw">class</span> D : <span class="c-kw">public</span> B {
+    <span class="c-kw">int</span> d_;
+<span class="c-kw">public</span>:
+    <span class="c-fn">D</span>() : <span class="c-fn">B</span>(), <span class="c-fn">d_</span>(<span class="c-num">0</span>) {}
+    <span class="c-fn">D</span>(<span class="c-kw">int</span> b, <span class="c-kw">int</span> d) : <span class="c-fn">B</span>(b), <span class="c-fn">d_</span>(d) {}
+    <span class="c-fn">D</span>(<span class="c-kw">const</span> D&amp; o) : <span class="c-fn">B</span>(o), <span class="c-fn">d_</span>(o.d_) { cout &lt;&lt; <span class="c-str">"D 复制构造\n"</span>; }  <span class="c-com">// 必须显式 B(o)！</span>
+    ~<span class="c-fn">D</span>() <span class="c-kw">override</span> { cout &lt;&lt; <span class="c-str">"D 析构\n"</span>; }
+};
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() { D <span class="c-fn">x</span>(<span class="c-num">1</span>, <span class="c-num">2</span>); D <span class="c-fn">y</span>(x); }
+<span class="c-com">// 构造：B → D；复制构造：B(o) → D；析构：D → B → D → B</span></code></pre></div>
+<div class="callout"><strong>易错</strong>：派生类复制构造函数如果不写 <code>B(o)</code>，编译器会自动调用基类的<strong>默认构造函数</strong>，导致基类部分没被复制。教材 7.4.2 专门考这个。<br><code>= delete</code> 可用于禁止派生类的某些构造函数（教材 7.4.4）。</div>
+<h3 id="sec-43">7.5 作用域分辨符与虚基类（教材 7.5）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> B { <span class="c-kw">public</span>: <span class="c-kw">void</span> <span class="c-fn">f</span>() <span class="c-kw">const</span> { cout &lt;&lt; <span class="c-str">"B::f\n"</span>; } };
+<span class="c-kw">class</span> D : <span class="c-kw">public</span> B {
+<span class="c-kw">public</span>:
+    <span class="c-kw">void</span> <span class="c-fn">f</span>() <span class="c-kw">const</span> { cout &lt;&lt; <span class="c-str">"D::f\n"</span>; }                    <span class="c-com">// 名字隐藏：派生类同名函数遮蔽基类的全部同名重载，与参数表无关</span>
+    <span class="c-kw">void</span> <span class="c-fn">call</span>() <span class="c-kw">const</span> {
+        <span class="c-fn">f</span>();                                                <span class="c-com">// D::f</span>
+        B::<span class="c-fn">f</span>();                                             <span class="c-com">// ✅ 用作用域分辨符访问被隐藏的基类同名成员</span>
+    }
+};
+
+<span class="c-com">// 菱形继承：不用虚继承会有两份 A 子对象，访问 a.x 产生二义性</span>
+<span class="c-kw">class</span> A { <span class="c-kw">public</span>: <span class="c-kw">int</span> x; <span class="c-kw">explicit</span> <span class="c-fn">A</span>(<span class="c-kw">int</span> v = <span class="c-num">0</span>) : <span class="c-fn">x</span>(v) {} };
+<span class="c-kw">class</span> B1 : <span class="c-kw">virtual</span> <span class="c-kw">public</span> A {};                             <span class="c-com">// virtual 继承：多条路径共享唯一一份基类子对象，消除菱形继承的二义性</span>
+<span class="c-kw">class</span> B2 : <span class="c-kw">virtual</span> <span class="c-kw">public</span> A {};
+<span class="c-kw">class</span> C  : <span class="c-kw">public</span> B1, <span class="c-kw">public</span> B2 {
+<span class="c-kw">public</span>:
+    <span class="c-fn">C</span>(<span class="c-kw">int</span> v) : <span class="c-fn">A</span>(v) {}                                      <span class="c-com">// 虚基类由最远派生类初始化：中间类 B1/B2 的初始化列表会被忽略</span>
+};
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() { D d; d.<span class="c-fn">call</span>(); C <span class="c-fn">c</span>(<span class="c-num">7</span>); cout &lt;&lt; c.x &lt;&lt; <span class="c-str">'\n'</span>; }  <span class="c-com">// 只有一份 x</span></code></pre></div>
+<ul><li><strong>作用域分辨符 <code>::</code></strong>：访问被隐藏的同名基类成员、类外定义成员函数、访问全局/命名空间名字。</li><li><strong>虚基类 <code>virtual public A</code></strong>：让多条继承路径共享<strong>唯一一份</strong>基类子对象，消除二义性；<strong>由最远派生类负责初始化虚基类</strong>，中间类的初始化会被忽略。</li></ul>
+<h3 id="sec-44">7.6 组合与继承（教材 7.8.1）</h3>
+<div class="tbl-wrap"><table><thead><tr><th></th><th>继承（<code>is-a</code>）</th><th>组合（<code>has-a</code>）</th></tr></thead><tbody><tr><td>关系</td><td>「是一种」，可向上转型</td><td>「有一个」，黑盒复用</td></tr><tr><td>耦合</td><td>高（白盒复用，暴露基类细节）</td><td>低（只依赖 <code>public</code> 接口）</td></tr><tr><td>灵活性</td><td>编译期确定</td><td>运行期可替换成员对象</td></tr></tbody></table></div>
+<div class="callout">口诀：<strong>能组合就别继承</strong>。教材 7.8.2 还会讲派生类对象的内存布局（基类子对象在前，新增成员在后）。</div>
+<hr>
+<h2 id="sec-45">8. 第 8 章 多态性【核心】</h2>
+<h3 id="sec-46">8.1 ➕ 多态的四种类型（教材 8.1.1，原版只分了两种）</h3>
+<div class="tbl-wrap"><table><thead><tr><th>类型</th><th>又称</th><th>实现机制</th><th>绑定时机</th></tr></thead><tbody><tr><td>重载多态</td><td>专用多态</td><td>函数重载、运算符重载</td><td>编译期（静态绑定）</td></tr><tr><td>强制多态</td><td>强制类型转换</td><td>隐式/显式类型转换</td><td>编译期</td></tr><tr><td>参数多态</td><td>泛型</td><td>函数模板、类模板（第 9 章）</td><td>编译期实例化</td></tr><tr><td><strong>包含多态</strong></td><td><strong>运行期多态 / 动态多态</strong></td><td><strong><code>virtual</code> 虚函数 + 基类指针/引用</strong></td><td><strong>运行期（动态绑定）</strong></td></tr></tbody></table></div>
+<div class="callout">考试爱问「C++ 支持哪几种多态」，按上表四类答；狭义的「多态」通常特指<strong>包含多态</strong>。</div>
+<h3 id="sec-47">8.2 运算符重载（教材 8.2，原版第 7 章）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Complex {
+    <span class="c-kw">double</span> r_, i_;
+<span class="c-kw">public</span>:
+    <span class="c-fn">Complex</span>(<span class="c-kw">double</span> r = <span class="c-num">0</span>, <span class="c-kw">double</span> i = <span class="c-num">0</span>) : <span class="c-fn">r_</span>(r), <span class="c-fn">i_</span>(i) {}
+    Complex <span class="c-kw">operator</span>+(<span class="c-kw">const</span> Complex&amp; o) <span class="c-kw">const</span> {                 <span class="c-com">// 成员函数版本</span>
+        <span class="c-kw">return</span> <span class="c-fn">Complex</span>(r_ + o.r_, i_ + o.i_);
+    }
+    <span class="c-kw">friend</span> <span class="c-ty">ostream</span>&amp; <span class="c-kw">operator</span>&lt;&lt;(<span class="c-ty">ostream</span>&amp; os, <span class="c-kw">const</span> Complex&amp; c);  <span class="c-com">// 非成员 + 友元</span>
+    <span class="c-kw">void</span> <span class="c-fn">show</span>() <span class="c-kw">const</span> { cout &lt;&lt; r_ &lt;&lt; <span class="c-str">'+'</span> &lt;&lt; i_ &lt;&lt; <span class="c-str">"i\n"</span>; }
+};
+
+<span class="c-ty">ostream</span>&amp; <span class="c-kw">operator</span>&lt;&lt;(<span class="c-ty">ostream</span>&amp; os, <span class="c-kw">const</span> Complex&amp; c) {
+    <span class="c-kw">return</span> os &lt;&lt; c.r_ &lt;&lt; <span class="c-str">'+'</span> &lt;&lt; c.i_ &lt;&lt; <span class="c-str">'i'</span>;
+}
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    Complex <span class="c-fn">a</span>(<span class="c-num">1</span>, <span class="c-num">2</span>), <span class="c-fn">b</span>(<span class="c-num">3</span>, <span class="c-num">4</span>);
+    cout &lt;&lt; (a + b) &lt;&lt; <span class="c-str">'\n'</span>;                                    <span class="c-com">// operator+ 成员版；operator&lt;&lt; 非成员版</span>
+}</code></pre></div>
+<p><strong>重载规则（教材 8.2.1，选择题高频）</strong>：</p>
+<ul><li>不能创造新运算符，只能重载 C++ 已有运算符；<strong>不能改变优先级、结合性、操作数个数</strong>。</li><li>至少有一个操作数是<strong>自定义类型</strong>（不能重写 <code>int + int</code>）。</li><li><strong>不能重载</strong>：<code>.</code>、<code>.*</code>、<code>::</code>、<code>?:</code>、<code>sizeof</code>、<code>typeid</code> 等。</li><li>必须是<strong>成员函数</strong>：<code>=</code>、<code>[]</code>、<code>()</code>、<code>-&gt;</code>；<code>&lt;&lt;</code> / <code>&gt;&gt;</code> 的第一个操作数是流对象，通常写成<strong>非成员函数 + 友元</strong>。</li><li>成员函数版左操作数必须是本类对象，且隐含 <code>this</code> 占一个参数位置（<code>a + b</code> → <code>a.operator+(b)</code>，只写一个形参）。</li></ul>
+<h3 id="sec-48">8.3 虚函数、虚析构、纯虚函数与抽象类（教材 8.3 / 8.4）</h3>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-com">// 示例 8-3：虚函数、纯虚函数、抽象类与虚析构（对应教材 8.3 / 8.4）</span>
+<span class="c-com">// 三个条件：基类声明 virtual、派生类签名一致地重写、通过基类指针或引用调用。</span>
+<span class="c-com">// 观察点：p-&gt;draw() 的静态类型是 Shape*，运行期经 vtable 调到 Circle::draw()。</span>
+<span class="c-com">// 必背：基类析构必须 virtual，否则 delete p 时派生部分不会被析构。</span>
+
+<span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">class</span> Shape {                                    <span class="c-com">// 抽象类</span>
+<span class="c-kw">public</span>:
+    <span class="c-kw">virtual</span> <span class="c-kw">double</span> <span class="c-fn">area</span>() <span class="c-kw">const</span> = <span class="c-num">0</span>;             <span class="c-com">// 纯虚函数 = 0：只声明接口；含纯虚函数的类成为抽象类，不能实例化</span>
+    <span class="c-kw">virtual</span> <span class="c-kw">void</span> <span class="c-fn">draw</span>() <span class="c-kw">const</span> { cout &lt;&lt; <span class="c-str">"Shape\n"</span>; }
+    <span class="c-kw">virtual</span> ~<span class="c-fn">Shape</span>() { cout &lt;&lt; <span class="c-str">"~Shape\n"</span>; }     <span class="c-com">// 虚析构：通过基类指针释放派生对象时，保证派生析构先执行、基类后执行</span>
+    <span class="c-com">// 若这里不加 virtual，delete 基类指针时只会调用 ~Shape，派生部分泄漏</span>
+};
+
+<span class="c-kw">class</span> Circle : <span class="c-kw">public</span> Shape {
+    <span class="c-kw">double</span> r_;
+<span class="c-kw">public</span>:
+    <span class="c-kw">explicit</span> <span class="c-fn">Circle</span>(<span class="c-kw">double</span> r) : <span class="c-fn">r_</span>(r) {}
+    <span class="c-kw">double</span> <span class="c-fn">area</span>() <span class="c-kw">const</span> <span class="c-kw">override</span> { <span class="c-kw">return</span> <span class="c-num">3.14159</span> * r_ * r_; }
+    <span class="c-kw">void</span> <span class="c-fn">draw</span>() <span class="c-kw">const</span> <span class="c-kw">override</span> { cout &lt;&lt; <span class="c-str">"Circle\n"</span>; }
+    ~<span class="c-fn">Circle</span>() <span class="c-kw">override</span> { cout &lt;&lt; <span class="c-str">"~Circle\n"</span>; }  <span class="c-com">// 析构函数也可标 override：让编译器确认基类析构确实是 virtual</span>
+};
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    Shape* p = <span class="c-kw">new</span> <span class="c-fn">Circle</span>(<span class="c-num">2.0</span>);
+    p-&gt;<span class="c-fn">draw</span>();                                   <span class="c-com">// Circle：动态绑定</span>
+    cout &lt;&lt; p-&gt;<span class="c-fn">area</span>() &lt;&lt; <span class="c-str">'\n'</span>;
+    <span class="c-kw">delete</span> p;                                    <span class="c-com">// 虚析构保证析构链完整：先 ~Circle 再 ~Shape，派生部分不会泄漏</span>
+}</code></pre></div>
+<p><strong>动态绑定的三个必要条件</strong>：① 基类有 <code>virtual</code> 函数；② 派生类<strong>签名完全一致</strong>地重写（用 <code>override</code> 让编译器帮你检查）；③ 通过<strong>基类指针或引用</strong>调用。</p>
+<div class="tbl-wrap"><table><thead><tr><th>概念</th><th>要点</th></tr></thead><tbody><tr><td><code>virtual</code></td><td>声明虚函数；<strong>基类写了，派生类不写也自动是虚函数</strong></td></tr><tr><td><code>override</code></td><td>显式标注重写，签名写错时编译报错（强烈建议）</td></tr><tr><td><code>final</code></td><td>禁止继续重写 / 禁止被继承</td></tr><tr><td>纯虚函数 <code>= 0</code></td><td>只给接口；含纯虚函数的类是<strong>抽象类，不能实例化</strong></td></tr><tr><td>虚析构</td><td>通过基类指针 <code>delete</code> 派生对象时，必须虚析构，否则派生部分不析构</td></tr><tr><td><strong>不能是虚函数</strong></td><td>构造函数、静态成员函数、友元函数；<strong>内联函数可以是虚函数</strong>（<code>inline</code> 只是给编译器的建议）</td></tr></tbody></table></div>
+<h3 id="sec-49">8.4 动态绑定原理与 RTTI（教材 8.7）</h3>
+<ul><li><strong>vtable</strong>：编译器为每个含虚函数的类生成一张虚函数表，对象内隐含一个 <code>vptr</code> 指向它；调用 <code>p-&gt;f()</code> 时通过 <code>vptr</code> 查表找到实际类型的函数地址，这就是运行期绑定的开销（一个间接寻址）。</li><li><strong>RTTI（运行时类型识别）</strong>：<code>dynamic_cast&lt;D*&gt;(basePtr)</code> 安全向下转型（失败返回 <code>nullptr</code>，引用版抛 <code>bad_cast</code>）；<code>typeid(obj)</code> 返回 <code>type_info</code>，<code>typeid(*ptr)</code> 得到动态类型。二者都要求基类<strong>有虚函数</strong>。</li><li>⭐ 原版手册的 vtable 内存布局讲得更细，属超纲，了解「有虚函数就多一个指针大小」即可。</li></ul>
+<hr>
+<h2 id="sec-50">9. 第 9 ~ 12 章：了解 / 选读</h2>
+<div class="callout">这几章教材讲得比原版手册细，但<strong>多数入门课只考概念与简单应用</strong>。按老师划的范围复习；标 ⭐ 的是明显超纲内容。</div>
+<div class="tbl-wrap"><table><thead><tr><th>教材章节</th><th>必须掌握的要点</th><th>边界</th></tr></thead><tbody><tr><td>第 9 章 模板与群体数据</td><td>函数模板 <code>template &lt;typename T&gt; T max(T a, T b)</code>、类模板 <code>template &lt;class T&gt; class Stack</code>；实例化发生在编译期</td><td>数组类/链表类/栈/队列的实现、插入/选择/交换排序属数据结构；⭐ 模板元编程、可变参数模板、模板特化不必深究</td></tr><tr><td>第 10 章 泛型与 STL</td><td>STL 四组件：<strong>容器、迭代器、算法、函数对象</strong>；<code>vector</code> / <code>map</code> / <code>set</code> 基本用法；迭代器区间是<strong>左闭右开</strong> <code>[first, last)</code></td><td>⭐ lambda、参数绑定、类型特征、Boost 一般了解即可</td></tr><tr><td>第 11 章 流类库与 I/O</td><td><code>cout</code> / <code>cin</code> 与插入符 <code>&lt;&lt;</code>、提取符 <code>&gt;&gt;</code>；<code>ofstream</code> / <code>ifstream</code> 文件读写；文本方式 vs 二进制方式；<code>stringstream</code></td><td>宽字符与宽流、对象串行化（11.6）属了解</td></tr><tr><td>第 12 章 异常处理</td><td><code>try</code> / <code>throw</code> / <code>catch</code>；<strong>栈展开</strong>时会调用已构造局部对象的析构；<code>catch (const exception&amp; e)</code> 放最后</td><td>⭐ 异常安全保证、<code>noexcept</code>、RAII 防资源泄露是进阶内容（原版 4 章讲了，选读）</td></tr></tbody></table></div>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-pp">#include</span> &lt;<span class="c-ty">vector</span>&gt;
+<span class="c-pp">#include</span> &lt;algorithm&gt;
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">template</span> &lt;<span class="c-kw">typename</span> T&gt;
+T <span class="c-fn">myMax</span>(T a, T b) { <span class="c-kw">return</span> a &gt; b ? a : b; }  <span class="c-com">// 函数模板（教材第 9 章）：编译期按实参类型实例化，不是运行期多态</span>
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+    <span class="c-ty">vector</span>&lt;<span class="c-kw">int</span>&gt; v{<span class="c-num">3</span>, <span class="c-num">1</span>, <span class="c-num">4</span>, <span class="c-num">1</span>, <span class="c-num">5</span>};            <span class="c-com">// 容器（第 10 章）</span>
+    <span class="c-fn">sort</span>(v.<span class="c-fn">begin</span>(), v.<span class="c-fn">end</span>());                <span class="c-com">// 算法 + 迭代器</span>
+    <span class="c-kw">for</span> (<span class="c-ty">vector</span>&lt;<span class="c-kw">int</span>&gt;::const_iterator it = v.<span class="c-fn">begin</span>(); it != v.<span class="c-fn">end</span>(); ++it)
+        cout &lt;&lt; *it &lt;&lt; <span class="c-str">' '</span>;                  <span class="c-com">// STL 迭代器区间是左闭右开 [begin, end)：end 指向尾后位置，不可解引用</span>
+    cout &lt;&lt; <span class="c-str">'\n'</span> &lt;&lt; <span class="c-fn">myMax</span>(<span class="c-num">2</span>, <span class="c-num">5</span>) &lt;&lt; <span class="c-str">'\n'</span>;     <span class="c-com">// 实例化为 myMax&lt;int&gt;</span>
+}</code></pre></div>
+<hr>
+<h2 id="sec-51">10. 缺口清单：教材有、原版手册没有（本版已补齐）</h2>
+<div class="tbl-wrap"><table><thead><tr><th>教材位置</th><th>考点</th><th>本版位置</th><th>常考形式</th></tr></thead><tbody><tr><td>3.1.3</td><td>值/引用/常引用参数传递</td><td>3.1</td><td>选择、改错</td></tr><tr><td>4.4</td><td><strong>类的组合</strong>、构造顺序、前向引用声明</td><td>4.5</td><td>填空、输出构造/析构顺序</td></tr><tr><td>4.5</td><td><strong>UML 类图</strong>（可见性符号、四种关系）</td><td>4.6</td><td>读图题</td></tr><tr><td>4.6 / 4.7 / 4.9.1</td><td>struct / union / enum / 位域</td><td>4.7</td><td>选择、<code>sizeof</code></td></tr><tr><td>4.9.2 / 4.9.3</td><td>构造类型转换、对象作为返回值传递</td><td>4.8</td><td><code>explicit</code>、复制构造调用次数</td></tr><tr><td>5.1 / 5.2</td><td>作用域、可见性、静态/动态生存期</td><td>5.1</td><td>输出题（屏蔽、<code>static</code>）</td></tr><tr><td>5.5 / 5.8.1</td><td>常对象、常成员、常引用、<code>mutable</code></td><td>5.3</td><td>判断合法性</td></tr><tr><td>5.6 / 5.8.2</td><td>多文件结构、头文件保护、<code>extern</code>、编译 vs 连接</td><td>5.4</td><td>概念、错误归因</td></tr><tr><td>6.1.4 / 6.2.11 / 6.3</td><td>对象数组、对象指针、<code>new[]</code>/<code>delete[]</code></td><td>6.1</td><td>构造函数调用次数</td></tr><tr><td>6.6</td><td><code>string</code> 类</td><td>6.3</td><td>编程小题</td></tr><tr><td>7.3</td><td><strong>类型兼容规则</strong></td><td>7.3</td><td>判断赋值是否合法</td></tr><tr><td>7.5.1 / 7.5.2</td><td>作用域分辨符、<strong>虚基类</strong></td><td>7.5</td><td>菱形继承二义性</td></tr><tr><td>8.1.1</td><td><strong>多态的四种类型</strong></td><td>8.1</td><td>简答</td></tr><tr><td>8.2.1</td><td>运算符重载规则、必须成员函数的 4 个运算符</td><td>8.2</td><td>选择题高频</td></tr><tr><td>8.7.2</td><td>RTTI / <code>dynamic_cast</code></td><td>8.4</td><td>概念</td></tr><tr><td>11 / 12</td><td>流类库、异常处理全章</td><td>第 9 节</td><td>依考纲</td></tr></tbody></table></div>
+<hr>
+<h2 id="sec-52">11. 超纲清单：原版手册有、教材不作要求（⭐ 选读）</h2>
+<div class="tbl-wrap"><table><thead><tr><th>原版位置</th><th>内容</th><th>教材情况</th><th>建议</th></tr></thead><tbody><tr><td>4.1</td><td>左值/右值、<code>std::move</code> 深入</td><td>4.3.6 只提移动构造</td><td>知道「移动 = 不复制、接管资源」即可</td></tr><tr><td>4.2</td><td>RAII、<code>unique_ptr</code> / <code>shared_ptr</code> / <code>weak_ptr</code></td><td>12.6.2 提到资源泄露</td><td>入门课不考；工程里很重要</td></tr><tr><td>3.5</td><td>Rule of Five / <strong>Rule of Zero</strong></td><td>无</td><td>选读；考试仍按三法则写深复制</td></tr><tr><td>5.2 / 5.3</td><td>名字隐藏与 <code>using</code>、对象切片深入</td><td>7.5.1 / 7.3 有简化版</td><td>概念了解</td></tr><tr><td>6.3</td><td>vtable 内存布局细节</td><td>8.7.3 有原理</td><td>知道「查表」即可</td></tr><tr><td>8</td><td>模板元编程、异常、STL 深入</td><td>9.5 / 10.9 标为「深度探索」</td><td>教材自己都标 depth，通常不考</td></tr><tr><td>9.2</td><td>十个面试高频问答</td><td>无</td><td>期末/面试用</td></tr></tbody></table></div>
+<div class="callout">判断原则：教材每章末尾的「<strong>深度探索</strong>」小节（2.6 / 3.7 / 4.9 / 5.8 / 6.8 / 7.8 / 8.7 / 9.5 / 10.9 / 11.6 / 12.6）通常是<strong>拔高内容</strong>，老师不划就先跳过。</div>
+<hr>
+<h2 id="sec-53">12. 速查与考试易错点</h2>
+<h3 id="sec-54">12.1 特殊成员函数一览</h3>
+<div class="tbl-wrap"><table><thead><tr><th>函数</th><th>签名</th><th>何时必须手写</th></tr></thead><tbody><tr><td>默认构造</td><td><code>A();</code></td><td>需要自定义初始化且还想 <code>A a;</code></td></tr><tr><td>复制构造</td><td><code>A(const A&amp;);</code></td><td><strong>类管理裸资源（指针）时，做深复制</strong></td></tr><tr><td>复制赋值</td><td><code>A&amp; operator=(const A&amp;);</code></td><td>同上，与复制构造成对出现</td></tr><tr><td>移动构造 ⭐</td><td><code>A(A&amp;&amp;) noexcept;</code></td><td>需要高效转移资源</td></tr><tr><td>移动赋值 ⭐</td><td><code>A&amp; operator=(A&amp;&amp;) noexcept;</code></td><td>同上</td></tr><tr><td>析构</td><td><code>~A();</code></td><td>需要 <code>delete</code> 资源 / 基类要 <code>virtual</code></td></tr></tbody></table></div>
+<h3 id="sec-55">12.2 复制构造高频问答（简答版）</h3>
+<ol><li><strong>为什么参数必须是引用？</strong> 值传递会再调复制构造，无限递归。</li><li><strong>为什么加 <code>const</code>？</strong> 不修改源对象，且能接收常对象与临时对象。</li><li><strong><code>A b = a;</code> 和 <code>b = a;</code> 区别？</strong> 前者初始化（复制构造），后者赋值（复制赋值）。</li><li><strong>默认复制构造有什么问题？</strong> 浅复制，指针成员共享内存导致 double free。</li><li><strong>什么时候必须手写复制构造？</strong> 类含 <code>new</code> 出来的资源 / 需要深复制 / 有引用或 <code>const</code> 成员需特殊处理（三法则）。</li><li><strong>派生类复制构造怎么写？</strong> <code>: Base(o), member_(o.member_)</code>，别漏基类。</li><li><strong>值传参 / 值返回会调用几次？</strong> 各一次（可能被 RVO 优化掉，别把副作用写进复制构造）。</li></ol>
+<h3 id="sec-56">12.3 Windows（Dev-C++）下中文乱码（保留原版 9.4）</h3>
+<div class="tbl-wrap"><table><thead><tr><th>现象</th><th>原因</th><th>解法</th></tr></thead><tbody><tr><td>编辑器里注释/字符串本身乱码</td><td>UTF-8 文件被按 GBK 打开</td><td>另存为 <strong>UTF-8 带 BOM</strong>；文件改编码后要<strong>关闭再重开</strong></td></tr><tr><td>编译报 <code>illegal byte sequence</code> / <code>C4819</code></td><td>编译器输入字符集不对</td><td><code>-finput-charset=UTF-8</code>（MSVC 用 <code>/utf-8</code>）</td></tr><tr><td>编译通过、<strong>运行输出</strong>乱码</td><td>控制台 936(GBK) vs 字符串 UTF-8 字节</td><td><code>main()</code> 开头 <code>SetConsoleOutputCP(65001)</code></td></tr><tr><td>中文变方块/问号</td><td>控制台字体</td><td>标题栏右键 → 属性 → 字体，换 Consolas / 新宋体</td></tr></tbody></table></div>
+<div class="code-block"><div class="code-head"><span class="lang">CPP</span><button class="copy-btn" type="button">复制代码</button></div><pre><code><span class="c-pp">#include</span> &lt;<span class="c-ty">iostream</span>&gt;
+<span class="c-pp">#ifdef</span> _WIN32
+<span class="c-pp">#include</span> &lt;windows.h&gt;
+<span class="c-pp">#endif</span>
+<span class="c-kw">using</span> <span class="c-kw">namespace</span> <span class="c-ty">std</span>;
+
+<span class="c-kw">int</span> <span class="c-fn">main</span>() {
+<span class="c-pp">#ifdef</span> _WIN32
+    <span class="c-fn">SetConsoleCP</span>(<span class="c-num">65001</span>);
+    <span class="c-fn">SetConsoleOutputCP</span>(<span class="c-num">65001</span>);
+<span class="c-pp">#endif</span>
+    cout &lt;&lt; <span class="c-str">"中文正常\n"</span>;
+}</code></pre></div>
+<div class="callout"><code>cpp_oop_demo.cpp</code> 已是 UTF-8 BOM 版并含上述设置；<code>cpp_oop_demo_gbk.cpp</code> 是给不认 BOM 的老版 Dev-C++ 的 GBK 备选（设 936，编译加 <code>-finput-charset=GBK -fexec-charset=GBK</code>）。<code>u8"..."</code> 只影响字符串字面量编码，<strong>不能</strong>改变控制台的解码方式；<code>system("chcp 65001")</code> 会闪黑框，不推荐。</div>
+<h3 id="sec-57">12.4 编译与调试命令（已在本机实测）</h3>
+<div class="callout">你的 Dev-C++ 5.11 自带 <strong>TDM-GCC 4.9.2</strong>，最高只支持 <strong><code>-std=c++14</code></strong>；<br>写 <code>-std=c++17</code> 会报 <code>unrecognized command line option</code>。路径：<br><code>D://Program Files (x86)\Dev-Cpp\MinGW64\bin\g++.exe</code>。</div>
+<div class="code-block"><div class="code-head"><span class="lang">TEXT</span><button class="copy-btn" type="button">复制代码</button></div><pre><code>g++ -std=c++14 -Wall -Wextra -pedantic cpp_oop_demo.cpp -o demo
+g++ -std=c++14 -fno-elide-constructors demo.cpp -o demo_all       # 关闭 RVO，观察完整复制链
+g++ -std=c++14 -finput-charset=GBK -fexec-charset=GBK cpp_oop_demo_gbk.cpp -o demo_gbk
+g++ --version                                                    # 查编译器版本</code></pre></div>
+<div class="tbl-wrap"><table><thead><tr><th>限制</th><th>影响</th></tr></thead><tbody><tr><td>不支持 <code>-std=c++17</code></td><td><code>inline static</code> 成员、结构化绑定等不能用；静态成员仍要类外定义</td></tr><tr><td>没有 ASan / UBSan</td><td><code>-fsanitize=address</code> 无法用，抓 double free 需 MSVC / Linux / WSL</td></tr><tr><td>换编译器可解除限制</td><td>装 MinGW-w64 新版，或在 Dev-C++「工具 → 编译选项」里改编译器目录</td></tr></tbody></table></div>
+<div class="callout">一键验证：<code>python verify_examples.py --run</code>（自动找 g++、逐块编译、运行两份 demo）。<br>当前结果：<strong>60 块中 56 块通过编译、4 块为已标注的示意/反例片段、0 个真实错误</strong>。</div>
+<hr>
+<h2 id="sec-58">附：文件清单</h2>
+<div class="tbl-wrap"><table><thead><tr><th>文件</th><th>用途</th></tr></thead><tbody><tr><td><code>cpp_oop_handbook_textbook.html</code> / <code>.md</code></td><td><strong>本手册</strong>（按教材编号）</td></tr><tr><td><code>教材目录_整理版.md</code></td><td>教材完整目录（12 章，带标记）</td></tr><tr><td><code>cpp_oop_handbook.html</code> / <code>.md</code></td><td>原版（按知识体系，讲解更展开）</td></tr><tr><td><code>cpp_oop_demo.cpp</code></td><td>综合示例，UTF-8 BOM，6 段 demo</td></tr><tr><td><code>cpp_oop_demo_gbk.cpp</code></td><td>同上，GBK 备选版</td></tr><tr><td><code>build_handbook.py</code></td><td>无依赖的 MD → HTML 构建脚本</td></tr></tbody></table></div>
+<div class="callout">本版按你提供的<strong>目录</strong>对齐，讲解内容依据标准 C++（C++11 ~ C++17）编写；所有代码示例已按本机 Dev-C++ 的 C++14 实测编译，未拿到教材正文，因此具体定义的表述顺序可能与课本略有出入；若老师有指定考纲或课后习题，发来可以进一步收敛到考点。</div>
+    <div class="footer">配套：教材目录_整理版.md · cpp_oop_handbook.html（知识体系版） · cpp_oop_demo.cpp ｜ 离线单文件，可打印。</div>
+  </main>
+</div>
+<button id="topBtn" type="button" title="回到顶部">↑</button>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc-link'));
+  var search = document.getElementById('tocSearch');
+  search.addEventListener('input', function(){
+    var q = this.value.trim().toLowerCase();
+    links.forEach(function(a){
+      a.style.display = (a.dataset.text.indexOf(q) > -1) ? '' : 'none';
+    });
+  });
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var code = btn.closest('.code-block').querySelector('pre code').innerText;
+      var done = function(){
+        btn.textContent = '已复制'; btn.classList.add('done');
+        setTimeout(function(){ btn.textContent = '复制代码'; btn.classList.remove('done'); }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(done, function(){ fallback(code, done); });
+      } else { fallback(code, done); }
+    });
+  });
+  function fallback(text, cb){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'absolute'; ta.style.left = '-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+  var ids = links.map(function(a){ return a.getAttribute('href').slice(1); });
+  var targets = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (!en.isIntersecting) return;
+      links.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id); });
+    });
+  }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+  targets.forEach(function(t){ observer.observe(t); });
+  var progress = document.getElementById('progress');
+  var topBtn = document.getElementById('topBtn');
+  window.addEventListener('scroll', function(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    topBtn.style.display = window.scrollY > 500 ? 'block' : 'none';
+  }, {passive:true});
+  topBtn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>
